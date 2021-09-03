@@ -1,45 +1,59 @@
 <template>
     <div id="container">
-            <aside>
-                <img src="../public/author.jpg" id="avatar" @click="goMain">
-                <p class="medium">Youky</p>
-                <div class="medium">
-                    <span style="margin-right:2px">{{age}}</span>
-                    <el-divider direction="vertical"></el-divider>
-                    <span style="margin-left:2px">♂</span>
-                </div>
-                <div class="line" v-for="item in info" :key="item.icon">
+        <header>
+            <div class="line">
+                <h2 @click="goMain">Youky</h2>
+                <div class="line" v-for="item in info.slice(1)" :key="item.icon">
                     <div class="left">
                         <span :class="'iconfont ' + item.icon"></span>
                     </div>
                     <a target="_blank" v-if="item.href" :href="item.href">{{item.content}}</a>
-                    <span v-else class="little">{{item.content}}</span>
                 </div>
-                <div class="progressBox">
-                    <span>Undergraduate</span>
-                    <el-progress type="circle" :percentage="underGraduate"></el-progress>
+            </div>
+        </header>
+
+        <aside>
+            <img src="../public/author.jpg" id="avatar" @click="goMain">
+            <p class="medium">Youky</p>
+            <div class="medium">
+                <span style="margin-right:2px">{{age}}</span>
+                <el-divider direction="vertical"></el-divider>
+                <span style="margin-left:2px">♂</span>
+            </div>
+            <div class="line" v-for="item in info" :key="item.icon">
+                <div class="left">
+                    <span :class="'iconfont ' + item.icon"></span>
                 </div>
-                <div class="progressBox">
-                    <span>Postgraduate</span>
-                    <el-progress type="circle" :percentage="0"></el-progress>
-                </div>
-            </aside>
-            <main>
-                <div v-for="item in cv" :key="item.title">
-                    <h2 class="title">
-                        <span :class="'iconfont ' + item.icon"></span> {{item.title}}
-                    </h2>
-                    <ul>
-                        <li v-for="li in item.list" :key="li[0]">
-                            <div class="flexBox">
-                                <div>{{li[0]}}</div>
-                                <div>{{li[1]}}</div>
-                                <div>{{li[2]}}</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </main>
+                <a target="_blank" v-if="item.href" :href="item.href">{{item.content}}</a>
+                <span v-else class="little">{{item.content}}</span>
+            </div>
+
+            <div class="progressBox">
+                <span>Undergraduate</span>
+                <el-progress type="circle" :percentage="underGraduate"></el-progress>
+            </div>
+            <div class="progressBox">
+                <span>Postgraduate</span>
+                <el-progress type="circle" :percentage="0"></el-progress>
+            </div>
+        </aside>
+
+        <main>
+            <div v-for="item in cv" :key="item.title">
+                <h2 class="title">
+                    <span :class="'iconfont ' + item.icon"></span> {{item.title}}
+                </h2>
+                <ul>
+                    <li v-for="li in item.list" :key="li[0]">
+                        <div class="flexBox">
+                            <div>{{li[0]}}</div>
+                            <div>{{li[1]}}</div>
+                            <div>{{li[2]}}</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </main>
     </div>
 </template>
 
@@ -54,7 +68,8 @@ export default {
                 },
                 {
                     icon:'iconyouxiang',
-                    content:'youkyf@qq.com'
+                    href:'youkyf@qq.com',
+                    content:'Email'
                 },
                 {
                     icon:'icongithub',
@@ -124,7 +139,6 @@ export default {
                         ['Node/TS'],
                         ['Vue/React'],
                         ['Java'],
-                        ['Python'],
                     ],
                 },
                 {
@@ -212,69 +226,78 @@ flex(x = center, y = center)
     display flex
     justify-content x
     align-items y
-
-display
-#container
-    height 100vh
-    display flex
-    aside
-        width 20vw
-        height 100%
-        background-color #8EE5EE
-        flex(flex-start)
-        flex-direction column
-        >>> .el-divider
-            background-color #000
-        #avatar
-            height 100px
-            border-radius 50px
-            margin-top 10px
-            margin-bottom 10px
-            &:hover
-                cursor pointer
-        .medium
-            font-size 18px
-            margin-bottom 10px
-        .little
-            font-size 14px
-            
-        .line
-            width 16vw
-            margin 10px 0
-            display flex
-            .left
-                width 40px
-            a
-                text-decoration none
-                color #777
-        .progressBox
-            width 100%
-            flex(space-around,center)
-            margin-bottom 20px
-    main
-        width 80vw
-        height 100%
-        overflow-y scroll
-        .title
-            background-color #F0F8FF
-            margin-bottom 10px
-            padding-left 20px
-            font-family '宋体'
-            color #333
-            span
-                font-size 24px
-        ul 
-            list-style-position inside
-            margin-left 30px
-            margin-bottom 30px
-            li
-                height 40px
-                width 72vw
+@media screen and (min-width 640px)
+    #container
+        height 100vh
+        display flex
+        aside
+            width 20vw
+            height 100%
+            background-color #8EE5EE
+            flex(flex-start)
+            flex-direction column
+            >>> .el-divider
+                background-color #000
+            #avatar
+                height 100px
+                border-radius 50px
+                margin-top 10px
+                margin-bottom 10px
+                &:hover
+                    cursor pointer
+            .medium
                 font-size 18px
-                list-style-position outside 
-                .flexBox
-                    width 100%
-                    flex()
-                div
-                    width 24vw
+                margin-bottom 10px
+            .little
+                font-size 14px
+
+            .line
+                width 16vw
+                margin 10px 0
+                display flex
+                .left
+                    width 40px
+                a
+                    text-decoration none
+                    color #777
+            .progressBox
+                width 100%
+                flex(space-around,center)
+                margin-bottom 20px
+        header
+            display none
+        main
+            width 80vw
+            height 100%
+            overflow-y scroll
+            .title
+                background-color #F0F8FF
+                margin-bottom 10px
+                padding-left 20px
+                font-family '宋体'
+                color #333
+                span
+                    font-size 24px
+            ul 
+                list-style-position inside
+                margin-left 30px
+                margin-bottom 30px
+                li
+                    height 40px
+                    width 72vw
+                    font-size 18px
+                    list-style-position outside 
+                    .flexBox
+                        width 100%
+                        flex()
+                    div
+                        width 24vw
+@media screen and (max-width 640px)
+    aside
+        display none
+    header
+        .line
+            flex(space-around)
+        a
+            margin-left 4px
 </style>

@@ -39,34 +39,66 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-// @media screen and (min-width:960px)
     main
-        height mainHeight 
-        #slogan
-            height 60vh
-            padding-top 10vh
-            display flex
-            justify-content center
-            align-items center
-            flex-direction column
-            .bigSlogan
-                font-size 80px
-                margin-bottom 50px
-            .littleSlogan
-                font-size 40px
-                margin 50px
-        #btnContainer
-            height 20vh
-            width 100vw
-            display flex
-            justify-content center
-            align-items center
-            button
-                height 60px
-                width 140px
-                background-color #409EFF
-                color #fff
-                border-radius 10px
-                font-size 18px
-                font-family Tahoma
+        height mainHeight
+@media screen and (min-width:640px)
+    #slogan
+        height 60vh
+        padding-top 10vh
+        display flex
+        justify-content center
+        align-items center
+        flex-direction column
+        .bigSlogan
+            font-size 80px
+            margin-bottom 50px
+        .littleSlogan
+            font-size 40px
+            margin 50px
+    #btnContainer
+        height 20vh
+        width 100vw
+        display flex
+        justify-content center
+        align-items center
+        button
+            height 60px
+            width 140px
+            background-color #409EFF
+            color #fff
+            border-radius 10px
+            font-size 18px
+            font-family Tahoma
+@media screen and (max-width:640px) 
+    #slogan
+        height 60vh
+        padding-top 10vh
+        display flex
+        justify-content space-around
+        align-items center
+        flex-direction column
+        .bigSlogan
+            font-size 24px
+            margin-bottom 50px
+            word-wrap break-word/*英文的时候需要加上这句，自动换行*/
+            word-break break-all
+        .littleSlogan
+            font-size 20px
+            margin 50px
+            width 200px
+    #btnContainer
+        height 20vh
+        width 100vw
+        display flex
+        justify-content center
+        align-items center
+        button
+            height 60px
+            width 140px
+            background-color #409EFF
+            color #fff
+            border-radius 10px
+            font-size 18px
+            font-family Tahoma
+
 </style>
