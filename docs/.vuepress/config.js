@@ -1,7 +1,7 @@
 const { config } = require("vuepress-theme-hope");
 const fs = require('fs');
 
-const category = ["前端", "计算机网络", "其他",]
+const category = ["前端", "计算机网络", "浏览器", "操作系统", "其他"]
 
 // 自动生成侧边栏
 const sidebar = {}
@@ -28,22 +28,7 @@ for(let category in sidebar){
 
 
 let nav = [
-	{
-		text:"前端",
-		icon:"javascript"
-	},
-	{
-		text:"算法",
-		icon:"function"
-	},
-	{
-		text:"计算机网络",
-		icon:"network",
-	},
-	{
-		text:'其他',
-		icon:"others",
-	},
+	...category.map(item => ({text:item})),
 	{
 		text:'GitHub',
 		link:'https://github.com/Youky1/Youky1.github.io',
@@ -58,7 +43,6 @@ module.exports = config({
         author: 'Youky',
 		logo:'/author.jpg',
 		displayAllHeaders: true,
-		title:'hello world',
         nav,
 		sidebar,
     },

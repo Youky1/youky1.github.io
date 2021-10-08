@@ -40,8 +40,14 @@ export default {
 
 <style lang="stylus" scoped>
     main
-        height mainHeight
+        height 100vh
+        p
+            color #fff
+
+// PC端
 @media screen and (min-width:640px)
+    main
+        background-image url('../public/bg.jpg')
     #slogan
         height 60vh
         padding-top 10vh
@@ -70,6 +76,8 @@ export default {
             font-size 18px
             font-family Tahoma
 @media screen and (max-width:640px) 
+    main
+        background-image url('../public/bg_phone.jpg')
     #slogan
         height 60vh
         padding-top 10vh

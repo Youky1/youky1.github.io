@@ -32,10 +32,6 @@
                 <span>Undergraduate</span>
                 <el-progress type="circle" :percentage="underGraduate"></el-progress>
             </div>
-            <div class="progressBox">
-                <span>Postgraduate</span>
-                <el-progress type="circle" :percentage="0"></el-progress>
-            </div>
         </aside>
 
         <main>
