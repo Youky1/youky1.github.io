@@ -1,9 +1,9 @@
 ---
-category: "其他"
+category: 其他
 tags:
-    - 博客
     - vuepress
 ---
+
 # VuePress实战
 
 ## 0. 项目初始化
@@ -14,7 +14,7 @@ tags:
 2. 在package.json的scripts中添加指令
 
 ```json
-{
+{ 
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
@@ -62,24 +62,6 @@ vuePress为Markdown提供了一些扩展功能：
 - 支持Emoji表情
 - 在md文件中使用```[[toc]]```渲染当前页面的目录
 - 代码特定行高亮：在语言后添加```{1,6-8}```来将第一行和第6到8行额外高亮
-- 支持在md中使用vue的模板语法
-    输入：
-
-```
-一加一等于： {{ 1 + 1 }}
-<span v-for="i in 3"> span: {{ i }} </span>
-```
-
-等价于：
-
-```
-一加一等于： 2
-span: 1 span: 2 span: 3
-```
-
-
-
-
 
 ## 4. 主题配置
 
@@ -97,7 +79,6 @@ module.exports = config({
     // own config here
 });
 ```
-
 
 ### 1.3 开发自定义主题
 
