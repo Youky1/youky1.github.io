@@ -1,3 +1,9 @@
+---
+category: 前端
+tag:
+    - vue
+---
+
 # MVC、MVP、MVVM分别是什么
 
 ## MVC
