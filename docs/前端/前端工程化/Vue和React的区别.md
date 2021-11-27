@@ -11,13 +11,13 @@ tag:
 - Vue通过模板语法进行渲染，对于各种效果使用的是`指令`
 - React通过JSX，对于各类效果都是使用JS的语法实现的
 如：
-- Vue中的条件渲染使用到v-if，在React的JSX中，则是{value && /\*...\*/}的形式。
-- Vue中渲染列表用到v-for，React中使用的是list.map
+  - Vue中的条件渲染使用到v-if，在React的JSX中，则是{value && /\*...\*/}的形式。
+  - Vue中渲染列表用到v-for，React中使用的是Array.map
 
 ## 监听数据变化的设计思想不一样
 
 - Vue是`push-based`，通过劫持数据的`getter`和`setter`，数据的改变会推动重新渲染。
-- React是`pull-based`中需要调用`setState`，显式通知系统需要重新渲染+
+- React是`pull-based`，使用者需要调用`setState`，显式通知系统需要重新渲染
 
 ## 渲染过程不同
 

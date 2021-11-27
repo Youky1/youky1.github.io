@@ -39,7 +39,7 @@ exports.key = value;
 ```js
 exports.key = value;
 exports.key2 = value2;
-exports = {
+module.exports = {
     key3:value3
 }
 // 只导出了key1和key2
@@ -54,6 +54,27 @@ const {value} = require('./module.js'); // 重复的导入会被忽略
 value = 'newValue'; // 修改不会改变原始值
 ```
 
+### 缓存机制
+
+为了防止多次导入使模块反复执行带来的问题，CommonJS提供了缓存机制。
+
+以模块绝对路径为key，module对象为value写入cache缓存。在引入模块时，会首先判断模块是否在cache内，若在则直接返回。
+
+```js
+// foo.js
+module.exports = {
+    foo: 1,
+}
+
+// bar.js
+
+const foo = require('./foo')
+foo.foo = 2;
+
+const foo2 = require('./foo');
+console.log(foo2.foo) // 2
+console.log(foo == foo2) // true
+```
 
 ## ES Module
 
@@ -95,4 +116,7 @@ console.log(v) // 2
 - CommonJS导入的值是原始值的拷贝，可以修改。ESModule导入的值是存在映射关系的引用，不可修改
 - 使用混合导出的语法时，CommonJS会出现覆盖问题，而ESModule不会
 - 兼容性：CommonJS兼容性更好
-- 为什么开发中可以混用：ESModule会被打包工具处理为CommonJS
+
+## 为什么开发中两种方式可以混用
+
+ESModule会被打包工具处理为CommonJS

@@ -67,5 +67,14 @@ tag:
 ### 微任务
 
 - Promise的回调（then/reject），以及以promise为基础开发的API：fetch等
--  MutationObserver （ 用来监测DOM树的变化 ）
+- MutationObserver （ 用来监测DOM树的变化 ）
+```js
+var observerOptions = {
+    childList: true,  // 观察目标子节点的变化，是否有添加或者删除
+    attributes: true, // 观察属性变动
+    subtree: true     // 观察后代节点，默认为 false
+}
+const oberver = new MutationObserver(function(){});
+oberver.observe(document.getElementById('container'), observerOptions)
+```
 - V8引擎的垃圾回收过程
