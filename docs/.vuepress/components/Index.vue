@@ -1,19 +1,5 @@
 <template>
   <main>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-6YZ2MKK1SP"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-6YZ2MKK1SP");
-    </script>
     <div id="slogan">
       <p class="bigSlogan">{{ slogan.big }}</p>
       <p class="littleSlogan">{{ slogan.little }}</p>
