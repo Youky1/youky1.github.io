@@ -1,41 +1,61 @@
 <template>
-    <main>
-        <div id="slogan">
-            <p class="bigSlogan">{{slogan.big}}</p>
-            <p class="littleSlogan">{{slogan.little}}</p>
-        </div>
-        <div id="btnContainer">
-            <button round type="primary" style="margin-right:10vw;" class="size" @click="goBlog">
-                <span class="iconfont iconboke"></span>
-                Blog
-            </button>
-            <button round type="primary" class="size" @click="goCV">
-                <span class="iconfont iconjianli1"></span>
-                CV
-            </button>
-        </div>
-    </main>
+  <main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-6YZ2MKK1SP"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-6YZ2MKK1SP");
+    </script>
+    <div id="slogan">
+      <p class="bigSlogan">{{ slogan.big }}</p>
+      <p class="littleSlogan">{{ slogan.little }}</p>
+    </div>
+    <div id="btnContainer">
+      <button
+        round
+        type="primary"
+        style="margin-right:10vw;"
+        class="size"
+        @click="goBlog"
+      >
+        <span class="iconfont iconboke"></span>
+        Blog
+      </button>
+      <button round type="primary" class="size" @click="goCV">
+        <span class="iconfont iconjianli1"></span>
+        CV
+      </button>
+    </div>
+  </main>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            slogan:{
-                big:'諦めない人は何も変えられない',
-                little:'什么都无法放弃的人，什么都改变不了'
-            }
-        }
+  data() {
+    return {
+      slogan: {
+        big: "諦めない人は何も変えられない",
+        little: "什么都无法放弃的人，什么都改变不了",
+      },
+    };
+  },
+  methods: {
+    goBlog() {
+      window.location.href += "article/";
     },
-    methods:{
-        goBlog(){
-            window.location.href += 'article/'
-        },
-        goCV(){
-            window.location.href += 'CV'
-        },
-    }
-}
+    goCV() {
+      window.location.href += "CV";
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -75,7 +95,7 @@ export default {
             border-radius 10px
             font-size 18px
             font-family Tahoma
-@media screen and (max-width:640px) 
+@media screen and (max-width:640px)
     main
         background-image url('../public/bg_phone.jpg')
     #slogan
@@ -108,5 +128,4 @@ export default {
             border-radius 10px
             font-size 18px
             font-family Tahoma
-
 </style>
