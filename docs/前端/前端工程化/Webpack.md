@@ -37,16 +37,52 @@ tag:
 
 仍存在的问题：**模块的加载**
 
-## loader和plugin的区别
 
-- loader是加载器，用于将A文件编译为B文件，即进行**文件转换**。loader是一个函数，接收源文件为参数，返回目标文件。webpack本身只能处理JS文件，所以对于其他类型的文件就需要使用loader进行加载
-- plugin用于扩展webpack的功能，可以控制**loader结束后**，打包的每个环节。是**基于事件机制**工作，会监听过程中的某些节点执行任务
 
-## loader
+## 核心概念
 
-webpack默认的loader只能加载`js`文件，要加载css等其他文件，就要给文件设置对应的loader。
+### entry
 
-### 设置方法
+> 打包的入口
+
+打包项目时，entry为指定的打包入口，从入口文件开始构建**_依赖图_**，来将所有被引用的文件进行打包。
+
+entry的取值分为两种情况：
+
+- 单入口：取值为字符串
+- 多入口：取值为对象
+
+
+
+### output
+
+> 打包的输出
+
+对于单入口和多入口打包：都只指定一个输出的`filename`和`path`。
+
+当具有多个入口时，默认输出到dist目录下，文件名同入口文件名。
+
+可以通过文件占位符（`[name]`）来表示入口文件名，并在此基础上进行修改，来区分打包结果的名称
+
+
+
+### mode
+
+用来指定当前的环境，取值有：
+
+- production
+- development
+- none
+
+**作用：**自动开启webpack内置的函数，在不同模式下开启不同的功能
+
+
+
+### loader
+
+webpack默认的loader只能加载`js`和`JSON`文件，要加载css等其他文件，就要给文件设置对应的loader。
+
+#### 设置方法
 
 在配置的`module`属性中，添加`rules`属性，取值为一个数组。
 
@@ -56,13 +92,13 @@ webpack默认的loader只能加载`js`文件，要加载css等其他文件，就
   - 如果只使用一个loader，取值为一个**字符串**
   - 如果使用多个loader，取值为一个**数组**。数组中的所有loader**从后向前**执行
 
-### 使用css代码
+#### 使用css代码
 
 要打包css代码，需要两种loader：
 - css-loader：将css代码加载到js中，并不会使用
 - style-loader：将css-loader转换后的结果，以style标签的形式，添加到页面
 
-### 常用的loader
+#### 常用的loader
 
 - 样式：
   - css-loader
@@ -76,16 +112,16 @@ webpack默认的loader只能加载`js`文件，要加载css等其他文件，就
   - file-loader
   - url-loader
 
-## plugin
+### plugin
 
 目的：增强webpack**自动化构建**方面的能力
 
-### 配置方法
+#### 配置方法
 
 - 引入插件（一般是一个构造函数）
 - 在配置对象的`plugins`数组中添加（用new 实例化）
 
-### 常见plugin
+#### 常见plugin
 
 - 打包前清除dist目录
 ```js
@@ -155,6 +191,156 @@ console.log(FOO_BAR); // 'something'
 ```
 - 将打包结果自动发布到服务器
 
+
+
+### loader和plugin的区别
+
+- loader是加载器，用于将A文件编译为B文件，即进行**文件转换**。loader是一个函数，接收源文件为参数，返回目标文件。
+- plugin用于扩展webpack的功能，可以控制**打包的每个环节**。是**基于事件机制**工作，会监听打包过程中的某些节点，并执行任务
+
+
+
+## 常见文件的解析
+
+### ES6
+
+webpack可以加载JS代码，但对于ES6的高级语法，需要使用`babel-loader`进行转换。
+
+1. 首先，在`module.rules`中添加`{ test: /.js$/, use: "babel-loader" }`
+2. 创建`.babelrc`文件：
+
+```js
+{
+  "presets": ["@babel/preset-env"]
+}
+```
+
+
+
+### css / sass
+
+解析css需要至少两个loader：
+
+- `css-loader`：加载.css文件，并转换为commonjs对象
+- `style-loader`：将样式通过style标签插入`head`标签中
+- `MiniCssExtractPlugin.loader`：将css提取到独立的css文件
+
+```js
+
+{
+    test: /.css$/, 
+    use: [
+        'style-loader',
+        'css-loader',
+    ]
+},
+
+```
+
+
+
+#### sass/stylus/less
+
+对于`sass`等预处理器代码，需在末尾再添加一个对应处理器的loader：
+
+```js
+{
+    test: /.sass$/, 
+    use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader'
+    ]
+}
+```
+
+
+
+#### 前缀自动补齐
+
+使用`postcss-loader`可以自动生成如`-webkit-`等兼容性样式前缀
+
+```js
+{
+    test: /.sass$/, 
+    use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader',
+        {
+            loader: 'postcss-loader',
+            options: {
+                plugins: () => require('autoprefixer')({
+                    browsers: ['>1%', 'IOS 7']	// 需要兼容的浏览器类型
+                })
+            }
+        }
+    ]
+}
+```
+
+
+
+### 图片 / 字体
+
+对于非代码文件，可以使用`file-loader`
+
+```js
+{
+    test: /.(jpg|png)$/,
+    use: "file-loader",
+},
+{
+    test: /.woff$/,
+    use: "file-loader",
+}
+```
+
+也可以使用`url-loader`，其作用和file-loader类似，但是可以将小图片转换为base64格式：
+
+```js
+{
+  test: /.(jpg|png)$/,
+  use: {
+    loader: "url-loader",
+    options: {
+      limit: 10240, // 10KB以下的图片会转为base64格式
+    },
+  },
+},
+```
+
+
+
+## 文件监听
+
+### 原理
+
+持续的轮询判断文件的**最后编辑时间**是否发生变化，检测到变化后不会立即告诉监听者，而是先进行缓存，等待一个`aggregateTimeout` 后统一处理。
+
+**缺点：**需要手动刷新浏览器才能更新。
+
+解决办法：热更新（dev-server）
+
+
+
+### 配置
+
+```js
+{
+    watch: true,					// 开启文件监听，默认false
+    watchOptions: {
+    	ignored: /node_module/,		// 忽略这部分的变化
+    	poll: 1000,					// 每秒轮询次数，默认1000次
+    	aggregateTimeout: 300,		// 监听到变化后的延迟，默认300ms
+  	},
+}
+```
+
+
+
+
+
 ## webpack-dev-server
 
 官方提供的开发服务器，提供了自动编译、热更新等功能
@@ -180,7 +366,7 @@ module.exports = {
 
 > 为什么不通过`copy-webpack-plugin`将静态资源加入打包结果？
 
-使用`copy-webpack-plugin`会进行磁盘文件的写入，在开发过程中影响效率。
+使用`copy-webpack-plugin`会进行磁盘IO，在开发过程中影响效率。
 
 ### Proxy代理
 
@@ -194,12 +380,12 @@ module.exports = {
 module.exports = {
   devServer: {
     proxy: {
-      '/api': { // 代理/api开头的请求。即为了代理所有请求，将所有请求的开头添加一个/api
+      '/api': { 		// 代理/api开头的请求。即为了代理所有请求，将所有请求的开头添加一个/api
         target: 'https://api.github.com',
         pathRewrite: {
-          '^/api': '' // 替换掉代理地址中的 /api
+          '^/api': '' 					// 替换掉代理地址中的 /api
         },
-        changeOrigin: true // 确保请求 GitHub 的主机名就是：api.github.com
+        changeOrigin: true 				// 确保请求 GitHub 的主机名就是：api.github.com
       }
     }
   }
@@ -208,9 +394,8 @@ module.exports = {
 
 ### 热更新
 
-对于样式文件的更新，提供了开箱即用
+对于文件的热更新，提供了开箱即用的plugin
 ```js
-// ./webpack.config.js
 const webpack = require('webpack')
 module.exports = {
   devServer: {
@@ -227,6 +412,107 @@ module.exports = {
 > 回退到直接刷新会怎么样？
 
 直接刷新后，将无法看到代码中的报错
+
+
+
+## 文件指纹
+
+> 打包后输出文件名的后缀
+
+#### 目的
+
+- 便于版本管理
+- 未修改的文件名称不变，便于使用浏览器缓存
+
+#### 常见类型
+
+- `hash`：和整个项目的构建相关。只要项目中有文件修改，hash值就会改变
+- `chunkhash`：和打包的chunk相关。不同的entry会生成不同的chunk。即一个入口内的文件改变后，该入口下引用的文件的chunkhash会变
+- `contenthash`：根据文件内容定义hash。文件内容不变则contenthash不变
+
+#### 使用
+
+**对于JS文件：**修改output选项即可
+
+```js
+output: {
+    filename: "[name]_[chunkhash].js"
+},
+```
+
+
+
+**对于图片/字体等：**修改loader的option
+
+- `[ext]`表示文件后缀
+- `[hash:8]`表示取前八位的文件hash值（由md5生成）
+
+```js
+{
+  test: /.(jpg|png)$/,
+  use: {
+    loader: "file-loader",
+    options: {
+      name: "[name]_[hash:8].[ext]"
+    },
+  },
+},
+```
+
+
+
+## 页面公共资源的分离
+
+### CDN形式引入基础库
+
+默认情况下，使用React/Vue等框架开发的项目打包时会将框架代码一并打包到结果中。
+
+使用 `html-webpack-externals-plugin` 可以将公共库提取出来，单独通过CDN引入，以减少打包结果的大小。
+
+```js
+const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
+module.exports = {
+    plugins: [
+    	new HtmlWebpackExternalsPlugin({
+    	  externals: [
+    	    {
+    	      module: "react",
+    	      entry: "https://unpkg.com/react@16/umd/react.production.min.js",
+    	      global: "React",
+    	    },
+    	    {
+    	      module: "react-dom",
+    	      entry:
+    	        "https://unpkg.com/react-dom@16/umd/react-dom.production.min.js",
+    	      global: "ReactDOM",
+    	    },
+    	  ],
+    	}),
+  	],
+}
+```
+
+
+
+### 提取公共资源
+
+使用 `optimization.splitChunks` 设置。可以自定义要提取的公共包的大小、类型等
+
+```js
+optimization: {
+    splitChunks: {
+      
+    },
+},
+```
+
+
+
+
+
+
+
+
 
 ## Tree Shaking
 > 在打包结果中筛选掉未引用的代码（**不是整个模块，其中的副作用代码仍会生效**）
@@ -250,7 +536,7 @@ module.exports = {
 
 而webpack中Tree Shaking的前提是ES Module代码，因此可能导致其失效
 
-## sideEffects
+## SideEffects
 > 完整移除整个没有使用的模块
 
 在`production`模式下会自动开启。在非生产模式下：
