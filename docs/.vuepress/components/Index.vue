@@ -1,26 +1,33 @@
 <template>
-  <main>
-    <div id="slogan">
-      <p class="bigSlogan">{{ slogan.big }}</p>
-      <p class="littleSlogan">{{ slogan.little }}</p>
-    </div>
-    <div id="btnContainer">
-      <button
-        round
-        type="primary"
-        style="margin-right:10vw;"
-        class="size"
-        @click="goBlog"
+  <div>
+    <main>
+      <div id="slogan">
+        <p class="bigSlogan">{{ slogan.big }}</p>
+        <p class="littleSlogan">{{ slogan.little }}</p>
+      </div>
+      <div id="btnContainer">
+        <button
+          round
+          type="primary"
+          style="margin-right: 10vw"
+          class="size"
+          @click="goBlog"
+        >
+          <span class="iconfont iconboke"></span>
+          Blog
+        </button>
+        <button round type="primary" class="size" @click="goCV">
+          <span class="iconfont iconjianli1"></span>
+          CV
+        </button>
+      </div>
+    </main>
+    <footer>
+      <a href="https://beian.miit.gov.cn/" target="_blank"
+        >鄂ICP备2021005069号</a
       >
-        <span class="iconfont iconboke"></span>
-        Blog
-      </button>
-      <button round type="primary" class="size" @click="goCV">
-        <span class="iconfont iconjianli1"></span>
-        CV
-      </button>
-    </div>
-  </main>
+    </footer>
+  </div>
 </template>
 
 <script>
@@ -46,10 +53,18 @@ export default {
 
 <style lang="stylus" scoped>
     main
+        width: 100%
         height 100vh
+        overflow-x: hidden
         p
             color #fff
-
+    footer
+      height 10vh
+      width 100%
+      background-color #eee
+      display flex
+      justify-content center
+      align-items center
 // PC端
 @media screen and (min-width:640px)
     main
@@ -81,9 +96,11 @@ export default {
             border-radius 10px
             font-size 18px
             font-family Tahoma
+
 @media screen and (max-width:640px)
     main
         background-image url('../public/bg_phone.jpg')
+        height: 100vh
     #slogan
         height 60vh
         padding-top 10vh
