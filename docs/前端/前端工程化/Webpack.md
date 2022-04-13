@@ -1,4 +1,5 @@
 ---
+`
 category: 前端
 tag:
     - 前端工程化
@@ -7,13 +8,13 @@ tag:
 
 # webpack
 
-## webpack解决了什么问题
+## 0. webpack解决了什么问题
 
 如何在前端项目中高效的管理和维护项目中的每一个资源。
 
 对于webpack的自定义设置，通过修改根目录的`webpack.config.js`文件
 
-## 模块化的演进过程
+## 1. 模块化的演进过程
 
 ### 第一阶段、文件划分
 > 将不同模块放在不同的js文件中，再在全局依次引入
@@ -39,7 +40,7 @@ tag:
 
 
 
-## 核心概念
+## 2. 核心概念
 
 ### entry
 
@@ -84,19 +85,13 @@ webpack默认的loader只能加载`js`和`JSON`文件，要加载css等其他文
 
 #### 设置方法
 
-在配置的`module`属性中，添加`rules`属性，取值为一个数组。
+在配置添加`module.rules`字段，取值为一个数组。
 
 每一项是针对某类文件使用的`loader`，包含两个属性：
 - `test`：取值为正则表达式，表示匹配的文件类型
 - `use`：使用的loader。
   - 如果只使用一个loader，取值为一个**字符串**
   - 如果使用多个loader，取值为一个**数组**。数组中的所有loader**从后向前**执行
-
-#### 使用css代码
-
-要打包css代码，需要两种loader：
-- css-loader：将css代码加载到js中，并不会使用
-- style-loader：将css-loader转换后的结果，以style标签的形式，添加到页面
 
 #### 常用的loader
 
@@ -114,7 +109,7 @@ webpack默认的loader只能加载`js`和`JSON`文件，要加载css等其他文
 
 ### plugin
 
-目的：增强webpack**自动化构建**方面的能力
+目的：增强webpack**自动化构建**各方面的能力
 
 #### 配置方法
 
@@ -125,7 +120,7 @@ webpack默认的loader只能加载`js`和`JSON`文件，要加载css等其他文
 
 - 打包前清除dist目录
 ```js
-const {CleanWebpackPlugin} = require('clean-webpack-plugin);
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 module.exports = {
   plugins:[
     new CleanWebpackPlugin()
@@ -172,13 +167,13 @@ module.exports = {
   },
 };
 ```
-- 注入一些会发生变化的值，如API地址
+- 注入一些会发生变化的值，如API地址：`webpack.DefinePlugin`
 ```js
 // webpack.config.js
-const webpack = require('webpack');
+const {DefinePlugin} = require('webpack');
 module.exports = {
   plugins:[
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       // 注入的值会作为字符串直接替换到代码中使用到的地方
       FOO_BAR: 'something'
     })
@@ -189,8 +184,6 @@ module.exports = {
 // src/main.js
 console.log(FOO_BAR); // 'something'
 ```
-- 将打包结果自动发布到服务器
-
 
 
 ### loader和plugin的区别
@@ -200,7 +193,7 @@ console.log(FOO_BAR); // 'something'
 
 
 
-## 常见文件的解析
+## 3. 常见文件的解析
 
 ### ES6
 
@@ -217,16 +210,15 @@ webpack可以加载JS代码，但对于ES6的高级语法，需要使用`babel-l
 
 
 
-### css / sass
+### 样式
 
-解析css需要至少两个loader：
+#### CSS
 
-- `css-loader`：加载.css文件，并转换为commonjs对象
-- `style-loader`：将样式通过style标签插入`head`标签中
-- `MiniCssExtractPlugin.loader`：将css提取到独立的css文件
+解析css需要至少两个loader，必须的是`css-loader`，负责加载.css文件，并转换为commonjs对象。此时样式并没有被真正应用，还需要以下二者之一
+
+- `style-loader`：将样式通过style标签插入`head`标签中（JS代码中完成）
 
 ```js
-
 {
     test: /.css$/, 
     use: [
@@ -234,7 +226,16 @@ webpack可以加载JS代码，但对于ES6的高级语法，需要使用`babel-l
         'css-loader',
     ]
 },
+```
 
+- `MiniCssExtractPlugin.loader`：将css提取到独立的css文件
+```js
+{
+    module:{
+        rule:[{ test: /.css$/, use: [MiniCssExtractPlugin.loader, "css-loader"] },]
+    },
+    plugins: [new MiniCssExtractPlugin()],
+}
 ```
 
 
@@ -312,17 +313,15 @@ webpack可以加载JS代码，但对于ES6的高级语法，需要使用`babel-l
 
 
 
-## 文件监听
+## 4. 文件监听
 
 ### 原理
 
-持续的轮询判断文件的**最后编辑时间**是否发生变化，检测到变化后不会立即告诉监听者，而是先进行缓存，等待一个`aggregateTimeout` 后统一处理。
+持续轮询，判断文件的**最后编辑时间**是否发生变化。检测到变化后不会立即告诉监听者，而是先进行**缓存**，等待一个`aggregateTimeout` 后统一处理。
 
 **缺点：**需要手动刷新浏览器才能更新。
 
-解决办法：热更新（dev-server）
-
-
+解决办法：热更新（`dev-server`）
 
 ### 配置
 
@@ -339,13 +338,11 @@ webpack可以加载JS代码，但对于ES6的高级语法，需要使用`babel-l
 
 
 
-
-
-## webpack-dev-server
+## 5. webpack-dev-server
 
 官方提供的开发服务器，提供了自动编译、热更新等功能
 
-为了提高构建速度，webpack0-dev-server并不是将打包结果写入磁盘，而是暂存到**内存**中。
+为了提高构建速度，webpack-dev-server并不是将打包结果写入磁盘，而是存到**内存**中。
 
 配置对象的devServer属性用来提供配置，[详细配置文档](https://webpack.js.org/configuration/dev-server/)
 ```js
@@ -353,12 +350,30 @@ webpack可以加载JS代码，但对于ES6的高级语法，需要使用`babel-l
 const path = require('path');
 module.exports = {
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000
+    static: {
+      directory: path.join(__dirname, 'public'), // 静态资源路径
+    },	
+    compress: true, // 是否开启压缩
+    port: 9000		// 端口号
   }
 }
 ```
+
+### 使用
+
+- 安装依赖：
+
+```shell
+npm install -D webpack-dev-server
+```
+
+- 启动服务：
+
+```shell
+npx webpack serve
+```
+
+
 
 ### 静态资源访问
 
@@ -367,6 +382,8 @@ module.exports = {
 > 为什么不通过`copy-webpack-plugin`将静态资源加入打包结果？
 
 使用`copy-webpack-plugin`会进行磁盘IO，在开发过程中影响效率。
+
+
 
 ### Proxy代理
 
@@ -392,21 +409,16 @@ module.exports = {
 }
 ```
 
+
+
 ### 热更新
 
 对于文件的热更新，提供了开箱即用的plugin
 ```js
-const webpack = require('webpack')
-module.exports = {
-  devServer: {
-    hot: true,      // 开启 HMR 特性，如果资源不支持或代码报错，会回退到直接刷新
-    hotOnly: true   // 只使用 HMR，不会回退
-  },
-  plugins: [
-    // HMR 特性所需要的插件
-    new webpack.HotModuleReplacementPlugin()
-  ]
-}
+devServer: {
+  hot: true,      // 开启 HMR 特性，如果资源不支持或代码报错，会回退到直接刷新
+  hotOnly: true   // 只使用 HMR，不会回退
+},
 ```
 
 > 回退到直接刷新会怎么样？
@@ -415,7 +427,7 @@ module.exports = {
 
 
 
-## 文件指纹
+## 6. 文件指纹
 
 > 打包后输出文件名的后缀
 
@@ -433,6 +445,8 @@ module.exports = {
 #### 使用
 
 **对于JS文件：**修改output选项即可
+
+- `[name]`表示文件名
 
 ```js
 output: {
@@ -461,13 +475,25 @@ output: {
 
 
 
-## 页面公共资源的分离
+## 7. 页面公共资源的分离
 
-### CDN形式引入基础库
+> module、bundle、chunk分别是什么含义？
+
+Webpack的作用是将任意模块依赖（js和非js资源如css、图片等）打包成静态资源，其中：
+
+- **module**：js文件、css文件、jpg文件等打包前的文件
+- **bundle**：打包后生成的产物，就是
+- **chunk**：对于bundle进行拆分，bundle的一部分
+
+### 基础库分离（CDN形式引入）
 
 默认情况下，使用React/Vue等框架开发的项目打包时会将框架代码一并打包到结果中。
 
 使用 `html-webpack-externals-plugin` 可以将公共库提取出来，单独通过CDN引入，以减少打包结果的大小。
+
+- `module`：公共库的名字、
+- `entry`：库的CDN地址
+- `global`：公共库全局导出的变量名
 
 ```js
 const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
@@ -476,9 +502,9 @@ module.exports = {
     	new HtmlWebpackExternalsPlugin({
     	  externals: [
     	    {
-    	      module: "react",
+    	      module: "react",	// 公共库的名字
     	      entry: "https://unpkg.com/react@16/umd/react.production.min.js",
-    	      global: "React",
+    	      global: "React",	// 公共库全局导出的变量名
     	    },
     	    {
     	      module: "react-dom",
@@ -499,22 +525,21 @@ module.exports = {
 使用 `optimization.splitChunks` 设置。可以自定义要提取的公共包的大小、类型等
 
 ```js
-optimization: {
-    splitChunks: {
-      
-    },
-},
+{
+	optimization: {
+      splitChunks: {
+      	chunks: "all", 					// 对所有引入方式的包都做分包
+      	minSize: 20000, 				// 打包前体积小于20k的包不会做分包处理
+      	minChunks: 1, 					// 最小被引用次数
+      	enforceSizeThreshold: 50000, 	// 如果某个包超过了50K则强制进行拆分
+      },
+  	},
+}
 ```
 
+​	
 
-
-
-
-
-
-
-
-## Tree Shaking
+## 8. Tree Shaking
 > 在打包结果中筛选掉未引用的代码（**不是整个模块，其中的副作用代码仍会生效**）
 
 在`production`模式下会自动开启。在非生产模式下设置`optimization`：
@@ -529,14 +554,14 @@ module.exports = {
 }
 ```
 
-### 使用babel-loader后Tree Shaking失效问题
+### 使用babel-loader后失效的问题
 
 在某些版本的`babel-loader`中，会将ESModule代码编译为CommonJS形式。
 > 最新版的babel-loader中，会根据环境禁用对ES Module的转换，因此不会带来这个问题
 
 而webpack中Tree Shaking的前提是ES Module代码，因此可能导致其失效
 
-## SideEffects
+## 9. SideEffects
 > 完整移除整个没有使用的模块
 
 在`production`模式下会自动开启。在非生产模式下：
@@ -545,7 +570,7 @@ module.exports = {
   - 取值为false，表示所有模块都没有副作用
   - 取值为数组，每个元素表示需要保留副作用的路径
 
-## SourceMap
+## 10. SourceMap
 > 提供源代码和打包后代码间的映射关系
 
 目的：在有报错时能找到源码中对应的位置
@@ -560,7 +585,7 @@ module.exports = {
 配置方法：修改配置对象的`devtool`属性决定选用的模式。不同的模式决定了构建速度和品质的不同。
 
 
-### eval模式
+### eval
 
 将模块放在eval函数中，通过添加注释的方法来判断属于哪个源文件。
 
@@ -568,11 +593,11 @@ module.exports = {
 
 缺点：只能定位到文件，不能定位到具体的行列
 
-### eval-source-map模式
+### eval-source-map
 
 生成了sourceMap，可以反推到源码中的行列信息
 
-### cheap-eval-source-map模式
+### cheap-eval-source-map
 
 只能定位到行，不能定位到列。构建速度比`eval-source-map`更快
 
@@ -587,27 +612,29 @@ module.exports = {
 ### 总结
 
 - 带source-map的是生成了sourceMap文件的
-- 带cheap的构建更快，但不能定位到列
+- 带cheap的构建更快，但只能定位到行，不能定位到列
 - 带module的是定位到未经过Loader加工的源码，不带module的是经过loader加工的
 
 在开发中，优先选用`cheap-module-eval-source-map`：
 - 对于React和Vue等框架，经过loader转换后的代码会有很大的变化，无法定位问题
-- 养成良好的编码习惯一行不会有太多内容，定位到行足够找出问题了
+- 养成良好的编码习惯，一行不会有太多内容，定位到行足够找出问题了
 
 在上线版本中，选用`none`，即不生成sourceMap：
 - 调试应该是开发中的事，不应在上线代码中debug
 - 生成sourceMap会暴露源代码，带来安全隐患
 
 
-## Code Splitting（分块打包）
+## 11. Code Splitting（分块打包）
 
 ### 分包的原因
 
-打包结果太过集中的弊端：
+**打包结果太过集中的弊端：**
+
 - 打包结果的体积太大
 - 不能做到按需加载，影响首屏时间
 
-打包结果太过分散的弊端：
+**打包结果太过分散的弊端：**
+
 - 多次请求本身会有延迟
 - 每次请求的请求头带来额外的带宽消耗
 
@@ -620,8 +647,8 @@ webpack实现分包的方式有两种：
 多用于传统的`多页应用`，一个页面对应一个打包入口。对于不同页面的公共部分，提取到公共结果中。
 
 1. 首先，在entry中设置多个入口
-2. 修改output，`[name]`作为占位符表示入口名称
-3. 设置HtmlWebpackPlugin的chunks属性，使其只加载对应的文件
+2. 修改`output`，`[name]`作为占位符表示入口名称
+3. 设置`HtmlWebpackPlugin`的`chunks`属性，使其只加载对应的文件
 4. 设置`optimization.splitChunks.chunks`为`'all'`，表示将公共部分自动分包
 
 ```js
@@ -667,4 +694,185 @@ import(/* webpackChunkName: 'foo' */'./foo/foo')
 ```
 
 如果两个模块的注释一样的话，会打包到一个文件中，借助这个特点可以自己更加细致的控制分包的结果。
+
+
+
+## 12.  Scope hoisting 
+
+### 要解决的问题
+
+构建后的代码中存在大量的闭包代码，导致：
+
+1. 打包产物的体积增大
+2. 运行时创建的函数作用域变多，增大内存开销
+
+### 原理
+
+将**只被引用了一次的模块**按引用顺序放在**一个函数作用域**里。
+
+### 使用
+
+- `production`模式下会默认开启
+- 手动添加`new webpack.optimize.ModuleConcatenationPlugin()`
+
+
+
+## 13. 打包基础库
+
+对于基础库的打包，一般会打包出未压缩和压缩后的两种版本。
+
+- entry中设置两个入口，指向同一个文件
+- output中，`library`属性指明库的导出情况
+- `mode`设为none，利用`TerserPlugin`选择性进行压缩
+
+```js
+module.exports = {
+  mode: "none",
+  entry: {
+    sum: "./src/index.js",
+    "sum.min": "./src/index.js",
+  },
+  output: {
+    filename: "[name].js",
+    library: {
+      name: "sum", 			// 暴露的库的名称
+      type: "umd", 			// 允许在所有模块定义下暴露本库
+      export: "default", 	// 使用默认导出，否则引入时需要使用.default获取默认导出的内容
+    },
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({ include: /\.min\.js$/ })],
+  },
+};
+```
+
+`package.json`中的`main`字段指向index.js，在其中通过判断环境参数，返回dist中对应的文件
+
+
+
+## 14. 构建过程分析
+
+### 初级分析：内置的stats
+
+在package.json中添加命令：
+
+```shell
+webpack --config src/ --json > stats.json
+```
+
+构建后会在目录下生成 stats.json 文件。
+
+### 速度分析：speed-measure-webpack-plugin
+
+```js
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+const smp = new SpeedMeasurePlugin();
+module.exports = smp.wrap({
+    // ...
+});
+```
+
+
+
+### 体积分析：webpack-bundle-analyzer
+
+打包后默认在8888端口打开页面显示各个bundle大小情况
+
+
+
+## 15. 构建优化
+
+### 多进程并行构建：thread-loader
+
+#### 原理
+
+将打包任务划分为多个node进程，将任务依次分配给这些进程。
+
+#### 使用
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          "thread-loader",
+          "expensive-loader"
+        ]
+      }
+    ]
+  }
+}
+```
+
+
+
+### 多进程并行压缩：TerserWebpackPlugin
+
+webpack5开箱即带，但如果需要自定义配置，仍需你安装：
+
+```
+npm install terser-webpack-plugin -D
+```
+
+```javascript
+const TerserPlugin = require("terser-webpack-plugin");
+
+module.exports = {
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
+};
+```
+
+
+
+### 利用缓存：提升二次构建速度
+
+#### babel-loader
+
+```js
+module: {
+    rules: [{ test: /\.js$/, use: ["babel-loader?cacheDirectory"] }],
+},
+```
+
+#### HardSourceWebpackPlugin
+
+```js
+var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+module.exports = {
+  // ...
+  plugins: [
+    new HardSourceWebpackPlugin()
+  ]
+}
+```
+
+
+
+### 优化查找策略
+
+通过`resolve`字段优化模块解析的策略：
+
+```js
+const path = require('path');
+
+module.exports = {
+  resolve: {
+    alias: {
+        Utilities: path.resolve(__dirname, 'src/utilities/'), // 引用时可以使用别名
+    },
+    mainFields: ['main'], // 使用package.json中的main字段作为入口
+    modules: [path.resolve(__dirname, 'node_modules')]	// 以node_modules作为查找入口
+  },
+};
+```
+
+
+
+
 
