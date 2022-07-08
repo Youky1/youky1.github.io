@@ -1,4 +1,8 @@
-> 使用js的方式写css样式
+---
+category: 前端
+tag:
+  - react
+---
 
 # 基础用法
 
@@ -7,60 +11,54 @@
 1. 使用`createGlobalStyle`方法生成一个组件，它会将样式注入全局作用域
 
 ```js
-import { createGlobalStyle } from 'styled-components';
-export const Body =  createGlobalStyle`
+import { createGlobalStyle } from "styled-components";
+export const Body = createGlobalStyle`
     body{
         margin: 0;
         padding: 0;
     }
-`
+`;
 ```
 
-2. 在项目的APP根组件中引入样式组件并使用
+2. 在项目的 APP 根组件中引入样式组件并使用
 
 ```js
-import { Body } from './style.js'
+import { Body } from "./style.js";
 function App() {
   return (
     <div>
       <Body />
-      <Header/>
+      <Header />
     </div>
   );
 }
 ```
-
-
 
 ## 局部样式
 
 1. 首先引入`styled`，利用`styled`可以创建附带样式的组件，可以指定为各种标签
 
 ```js
-import styled from 'styled-components';
+import styled from "styled-components";
 export const HeaderWrapper = styled.div`
-    height: 55px;
-    border: 1px solid #f0f0f0;
-`
+  height: 55px;
+  border: 1px solid #f0f0f0;
+`;
 ```
 
 2. 在组件中，引入样式组件，像正常组件一样使用
 
-
-
 # 引用图片的方法
 
-在样式组件中直接使用`url()`的方法引入图片的话，会出现路径的问题，此时要先用import引入图片，再用插值表达式的形式插入样式字符串中
+在样式组件中直接使用`url()`的方法引入图片的话，会出现路径的问题，此时要先用 import 引入图片，再用插值表达式的形式插入样式字符串中
 
 ```js
-import logo from './logo.png';
-import styled from 'styled-components';
+import logo from "./logo.png";
+import styled from "styled-components";
 export const Logo = styled.div`
-	background: url(${logo})
-`
+  background: url(${logo});
+`;
 ```
-
-
 
 # 引用其他组件
 
@@ -80,37 +78,31 @@ export const Button = styled.button`
 <StyledA></StyledA>
 ```
 
-
-
 # 对象形式的样式
 
-除了使用字符串，还可以使用对象传入styled的一系列构造函数
+除了使用字符串，还可以使用对象传入 styled 的一系列构造函数
 
 ```js
 const Box = styled.div({
-  background: 'palevioletred',
-  height: '50px',
-  width: '50px'
+  background: "palevioletred",
+  height: "50px",
+  width: "50px",
 });
 ```
 
-或是传入一个函数，以便使用props：
+或是传入一个函数，以便使用 props：
 
 ```js
-const PropsBox = styled.div(props => ({
+const PropsBox = styled.div((props) => ({
   background: props.background,
-  height: '50px',
-  width: '50px'
+  height: "50px",
+  width: "50px",
 }));
 ```
 
-
-
-
-
 # 给标签添加属性
 
-要创建一个带样式的a标签，给它添加href的方法有两种：
+要创建一个带样式的 a 标签，给它添加 href 的方法有两种：
 
 1. 在导出的组件上添加属性
 
@@ -122,17 +114,15 @@ const PropsBox = styled.div(props => ({
 
 ```js
 export const Link = styled.a.attrs({
-    href: '/'
+  href: "/",
 })`
-	color: #000
-`
+  color: #000;
+`;
 ```
-
-
 
 ## 动态效果
 
-`attrs`函数还可以接收一个函数，读取组件的props以实现动态的样式效果
+`attrs`函数还可以接收一个函数，读取组件的 props 以实现动态的样式效果
 
 ```js
 const button = styled.button.attrs(props => {
@@ -142,52 +132,44 @@ const button = styled.button.attrs(props => {
 `
 ```
 
-
-
 ## 覆盖
 
 如果使用了继承，则子组件的`attrs`会覆盖父组件的`attrs`
 
-
-
 # 给组件传递属性
 
-因为用styled创建的实际上就是`React组件`，因此可以在创建时读取其props属性，用插值表达式实现动态的样式
+因为用 styled 创建的实际上就是`React组件`，因此可以在创建时读取其 props 属性，用插值表达式实现动态的样式
 
 ```js
 const Title = styled.div`
-	color: ${props => props.color ? props.color : '#000'};
-`
+  color: ${(props) => (props.color ? props.color : "#000")};
+`;
 ```
 
 使用时：
 
 ```html
 // 黑色标题
-<Title>title</Title>
+<title>title</title>
 
 //红色标题
-<Title color='red'>red title</Title>
+<title color="red">red title</title>
 ```
-
-
 
 # 共享样式
 
-使用`css`API，可以创建一个css片段，在其他组件中使用插值表达式的方式引入该片段，可以实现公共样式的抽离
+使用`css`API，可以创建一个 css 片段，在其他组件中使用插值表达式的方式引入该片段，可以实现公共样式的抽离
 
 ```js
-import {css} from 'styled-components'
+import { css } from "styled-components";
 const red = css`
-    color: red;
-`
+  color: red;
+`;
 export const RedTittle = styled.div`
-    font-size: 1.5rem;
-    ${green}
-`
+  font-size: 1.5rem;
+  ${green}
+`;
 ```
-
-
 
 # 继承已有样式
 
@@ -195,14 +177,12 @@ export const RedTittle = styled.div`
 
 ```js
 const Button = styled.button`
-	color: #777;
-`
+  color: #777;
+`;
 const BigButton = styled(Button)`
-	font-size: 24px;
-`
+  font-size: 24px;
+`;
 ```
-
-
 
 如果要继承样式，但是需要更改标签名，则可以在使用时传入一个`as`属性，来动态更改标签。`as`的取值可以是标签名，也可以是自定义组件
 
@@ -219,42 +199,38 @@ const RedButton = styled(RedText)`
 ```
 
 ```js
-const ReversedButton = props => 
+const ReversedButton = props =>
 				<Button {...props} children{props.children.split('').reverse()} />
 
 <Button as={ReversedButton}>123</Button>
 // 显示321
 ```
 
-
-
 # 嵌套、伪元素、伪类
 
-- styled-components使用的预处理器`stylis`支持样式的直接嵌套（类似`sass`）。
+- styled-components 使用的预处理器`stylis`支持样式的直接嵌套（类似`sass`）。
 
 - 在嵌套层级中，使用`&`符号代表父级元素，以此来添加其伪元素和伪类选择器
-- 样式覆盖：两个`&`符号可以表示当前为当前元素增添高优先级的样式（两个class的优先级，大于class小于id）
+- 样式覆盖：两个`&`符号可以表示当前为当前元素增添高优先级的样式（两个 class 的优先级，大于 class 小于 id）
 
 ```js
 const Container = styled.div`
-	display: flex;
-	.item{
-		flex: 1;
-	}
-	&:hover{
-		border: 1px solid #777
-	}
-	&&{
-		margin: 0;
-	}
-`
+  display: flex;
+  .item {
+    flex: 1;
+  }
+  &:hover {
+    border: 1px solid #777;
+  }
+  && {
+    margin: 0;
+  }
+`;
 ```
 
+# keyframe 动画
 
-
-# keyframe动画
-
-keyframe动画不属于某一个组件，但为了不定义到全局作用域形成命名污染，提供了`keyframes`API进行动画的定义。然后在组件中引用该动画，即可将动画效果封装至组件
+keyframe 动画不属于某一个组件，但为了不定义到全局作用域形成命名污染，提供了`keyframes`API 进行动画的定义。然后在组件中引用该动画，即可将动画效果封装至组件
 
 ```js
 const rotate = keyframes`
@@ -265,57 +241,53 @@ const rotate = keyframes`
         transform: rotate(360deg);
     }
   }
-`
+`;
 
 export const RotateWrapper = styled.div`
-    animation: ${rotate} 1s infinite;
-`
+  animation: ${rotate} 1s infinite;
+`;
 ```
-
-
 
 # 主题
 
 > 为组件注入某一系列的主题变量
 
-1. 使用props.theme.xx变量为样式赋值。对于组件可以设置默认主题
+1. 使用 props.theme.xx 变量为样式赋值。对于组件可以设置默认主题
 
 ```js
 const Button = styled.button`
-	color: $(props => props.theme.color);
-`
+  color: $(props => props.theme.color);
+`;
 Button.defaultProps = {
-    theme: {
-        color: '#000'
-    }
-}
+  theme: {
+    color: "#000",
+  },
+};
 ```
 
-2. 引入`ThemeProvider组件`，并传入`theme属性`，其内部的组件的`props.theme`都可以读取到这个theme对象的值。`ThemeProvider组件`支持嵌套
+2. 引入`ThemeProvider组件`，并传入`theme属性`，其内部的组件的`props.theme`都可以读取到这个 theme 对象的值。`ThemeProvider组件`支持嵌套
 3. `theme属性`的取值可以是对象，也可以是函数，当取值为函数时，接收其父级`ThemeProvider组件`提供的`theme对象`，并返回本级的`theme对象`
 4. 在组件上也可以直接使用`theme属性`，可用于覆盖`ThemeProvider组件`提供的主题
 
 ```jsx
 const themeObj = {
-    color: 'red'
-}
+  color: "red",
+};
 const func = (pre) => {
-    return {
-        colro: 'green'
-    }
-}
+  return {
+    colro: "green",
+  };
+};
 <div>
-    <Button>此处颜色为defaultProps中的颜色#000</Button>
-    <ThemeProvider theme={theme}>
-        <Button>此处颜色为red</Button>
-        <ThemeProvider theme={func}>
-            <Button>此处颜色为green</Button>
-        </ThemeProvider>
+  <Button>此处颜色为defaultProps中的颜色#000</Button>
+  <ThemeProvider theme={theme}>
+    <Button>此处颜色为red</Button>
+    <ThemeProvider theme={func}>
+      <Button>此处颜色为green</Button>
     </ThemeProvider>
-</div>
+  </ThemeProvider>
+</div>;
 ```
-
-
 
 ## 在普通组件中使用主题
 
@@ -323,29 +295,26 @@ const func = (pre) => {
 - 导出组件时，调用`withTheme`方法并导出其结果
 
 ```js
-import { withTheme } from 'styled-components';
+import { withTheme } from "styled-components";
 class MyComponent extends React.Component {
   render() {
-    console.log('Current theme: ', this.props.theme);
+    console.log("Current theme: ", this.props.theme);
     // ...
   }
 }
 export default withTheme(MyComponent);
 ```
 
-
-
-## 在useContext中使用主题
+## 在 useContext 中使用主题
 
 ```js
-import { useContext } from 'react';
-import { ThemeContext } from 'styled-components';
+import { useContext } from "react";
+import { ThemeContext } from "styled-components";
 
 const MyComponent = () => {
   const themeContext = useContext(ThemeContext);
 
-  console.log('Current theme: ', themeContext);
+  console.log("Current theme: ", themeContext);
   // ...
-}
+};
 ```
-
