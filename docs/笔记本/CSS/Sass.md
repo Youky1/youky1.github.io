@@ -9,12 +9,12 @@
 
 支持嵌套的 css 结构：
 
-```scs
-.title{
-	font-size:20px;
-	.icon{
-		font-size:22px
-	}
+```scss
+.title {
+  font-size: 20px;
+  .icon {
+    font-size: 22px;
+  }
 }
 ```
 
@@ -93,13 +93,13 @@ p.foo {
 
 使用场景：一个选择器的样式是另一个选择器的子集。如错误提示和严重错误提示。一般做法是全部添加`.error`，严重错误添加`.serious-error`。若使用继承可以做到区分使用两种选择器：
 
-```scs
+```scss
 .error {
-	color: red;
+  color: red;
 }
 .serious-error {
-	@extend .error;
-	font-weight: bold;
+  @extend .error;
+  font-weight: bold;
 }
 ```
 

@@ -67,6 +67,7 @@ tag:
 ### 微任务
 
 - Promise的回调（then/reject），以及以promise为基础开发的API：fetch等
+- V8引擎的垃圾回收过程
 - MutationObserver （ 用来监测DOM树的变化 ）
 ```js
 var observerOptions = {
@@ -77,4 +78,3 @@ var observerOptions = {
 const oberver = new MutationObserver(function(){});
 oberver.observe(document.getElementById('container'), observerOptions)
 ```
-- V8引擎的垃圾回收过程

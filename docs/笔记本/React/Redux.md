@@ -2,6 +2,7 @@
 category: 前端
 tag:
   - react
+  - redux
 ---
 
 # Redux
@@ -383,6 +384,34 @@ const store = configureStore({
   },
 });
 ```
+
+
+
+RTK默认添加了`redux-thunk`，如果要添加其他中间件的话，则加入 `middleware` 字段，取值为一个数组
+
+```javascript
+const store = configureStore({
+  reducer: {},
+  middleware: [A,B],
+});
+```
+
+如果要定制化插件的话，取值也可以为函数：
+
+```javascript
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: myCustomApiService,
+      },
+      serializableCheck: false,
+    }),
+})
+```
+
+
 
 ### 6.2 切片（Slice）
 

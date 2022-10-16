@@ -7,6 +7,26 @@ tag:
 
 # Vue3
 
+## 起步
+
+### 创建应用
+
+每个应用实例都是通过createApp创建的：
+
+```js
+import { createApp } from 'vue'
+import App from './App.vue' 	// 从一个单文件组件中导入根组件
+const app = createApp(App)		// 创建实例
+app.mount('#app')				// 调用mount方法后，实例才会进行渲染，返回值是根组件实例
+```
+
+>  `.mount()` 方法必须在整个应用**配置**和**资源注册**完成后被调用 
+
+### 应用配置
+
+-  使用 `.config`  方法进行全局配置（如错误处理）
+- 使用 `.component` 注册全局组件
+
 ## 组合式 API
 
 ### setup 组件选项

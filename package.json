@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vuepress dev docs --temp .temp",
-    "build": "vuepress build docs && sh deploy.sh"
+    "build": "vuepress build docs && node deploy.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "async-validator": "^1.11.5",
     "element-ui": "^2.15.5",
     "npm": "^7.20.6",
+    "simple-git": "^3.14.1",
     "vuepress": "^1.8.2",
     "vuepress-theme-hope": "^1.19.2"
   },
