@@ -22,11 +22,6 @@
         </button>
       </div>
     </main>
-    <footer>
-      <a href="https://beian.miit.gov.cn/" target="_blank"
-        >鄂ICP备2021005069号</a
-      >
-    </footer>
   </div>
 </template>
 
@@ -58,13 +53,6 @@ export default {
         overflow-x: hidden
         p
             color #fff
-    footer
-      height 10vh
-      width 100%
-      background-color #eee
-      display flex
-      justify-content center
-      align-items center
 // PC端
 @media screen and (min-width:640px)
     main
