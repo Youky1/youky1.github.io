@@ -51,6 +51,9 @@
 - [对于前端工程化的理解](https://youky1.github.io/前端/前端工程化/对于前端工程化的理解) 
 - [针对移动端应用的优化](https://youky1.github.io/前端/前端工程化/针对移动端应用的优化) 
 
+### 微信小程序
+- [底层框架实现原理](https://youky1.github.io/前端/微信小程序/底层框架实现原理) 
+
 ### 性能优化问题
 - [webworker的使用](https://youky1.github.io/前端/性能优化问题/webworker的使用) 
 - [动画效果](https://youky1.github.io/前端/性能优化问题/动画效果) 
@@ -99,5 +102,6 @@
 - [Vite搭建React项目](https://youky1.github.io/其他/Vite搭建React项目)
 - [VuePress实战](https://youky1.github.io/其他/VuePress实战)
 - [如何用Nodejs下载B站视频](https://youky1.github.io/其他/如何用Nodejs下载B站视频)
+- [实现一个命令行可视化库](https://youky1.github.io/其他/实现一个命令行可视化库)
 - [实现一个轮播图](https://youky1.github.io/其他/实现一个轮播图)
 - [收藏夹](https://youky1.github.io/其他/收藏夹)
