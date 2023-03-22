@@ -47,7 +47,7 @@ for (let category in sidebar) {
       const obj = {
         title: file,
         prefix: file + "/",
-        children: blogs,
+        children: blogs
       };
       sidebar[category].push(obj);
     }
@@ -57,12 +57,12 @@ for (let category in sidebar) {
 const nav = [
   ...category.map((item) => ({
     text: item,
-    link: `/category/${item}/`,
+    link: `/category/${item}/`
   })),
   {
     text: "GitHub",
-    link: "https://github.com/Youky1/Youky1.github.io",
-  },
+    link: "https://github.com/Youky1/Youky1.github.io"
+  }
 ];
 
 module.exports = config({
@@ -71,30 +71,6 @@ module.exports = config({
     logo: "/author.jpg",
     displayAllHeaders: true,
     nav,
-    sidebar,
-  },
-  plugins: [
-    [
-      "@vuepress/google-analytics",
-      {
-        ga: "G-6YZ2MKK1SP",
-      },
-    ],
-  ],
-  head: [
-    [
-      "script",
-      { src: "https://www.googletagmanager.com/gtag/js?id=G-6YZ2MKK1SP" },
-    ],
-    [
-      "script",
-      {},
-      `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-6YZ2MKK1SP');
-      `,
-    ],
-  ],
+    sidebar
+  }
 });
