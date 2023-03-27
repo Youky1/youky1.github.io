@@ -1,3 +1,9 @@
+---
+category: 前端
+tag:
+  - TS
+---
+
 # TypeScript
 
 ## 概念
@@ -32,19 +38,21 @@ tsc --init
 - 使用`tsc xx.ts`编译单个文件时不会使用配置
 - tsc 的命令行参数具有比 tsconfig 更高的优先级
 
-### 配置项
+## 类型基础
 
-## 类型
+### TS 类型判断逻辑
 
-### 类型注解
+使用结构化类型系统，即比较**类型上实际拥有的属性和方法**而不是通过**类型名称**，来判断是否兼容
 
-人**主动**告诉 TS 某个变量的类型；
+### 三斜线指令
 
-### 类型推断
+类型的 import，用于**声明当前的文件依赖的其他类型声明**。必须放在文件开头
 
-TS 根据已知信息，**自动**推断某个变量的类型。变量只有在**声明时就赋值**，才会进行类型推断
-
-**写代码的原则**：能够进行类型推断的变量， 不需要注解。
+```typescript
+/// <reference path="./other.d.ts" />
+/// <reference types="node" />
+/// <reference lib="dom" />
+```
 
 ### 联合类型
 
@@ -99,7 +107,7 @@ A 兼容 B，或 B 兼容 A：
 - `父类`与`子类`可以相互断言
 - `联合类型`可被断言为其中一个类型
 
-### 和类型声明的区别
+#### 和类型声明的区别
 
 类型声明比类型断言更加严格：
 
@@ -114,13 +122,87 @@ interface Cat extends Animal {
   run(): void;
 }
 const animal: Animal = {
-  name: "tom",
+  name: "tom"
 };
 const cat = animal as Cat; // 不报错
 const cat: Cat = animal; // 类型 "Animal" 中缺少属性 "run"，但类型 "Cat" 中需要该属性。
 ```
 
-## 基础类型
+#### 非空断言与可选链
+
+```typescript
+a!.b(); // 非空断言，断言a一定是非空的
+a?.b(); // 可选链，若a为空则返回undefined
+```
+
+区别：非空断言在运行时仍会继续调用 b，可能会导致报错
+
+### 常见关键字
+
+#### keyof
+
+返回对象的键组成的联合类型
+
+#### extends
+
+判断兼容性。`a extends b` 成立，表明 a 可以赋值给 b，或者说 a 是 b 的子类型
+
+```typescript
+interface X {
+  name: string;
+}
+interface Y {
+  name: string;
+  age: number;
+}
+type B = Y extends X ? true : false; // 子类型Y拥有父类型X的所有类型
+```
+
+#### infer
+
+**在条件类型中提取类型的某一部分信息**
+
+```typescript
+type Swap<T extends any[]> = T extends [infer A, infer B] ? [B, A] : T;
+
+type SwapResult1 = Swap<[1, 2]>; // 符合元组结构，首尾元素替换[2, 1]
+type SwapResult2 = Swap<[1, 2, 3]>; // 不符合结构，没有发生替换，仍是 [1, 2, 3]
+```
+
+```typescript
+// 第一个元素是A类型，其余元素是B类型
+type getType<T extends any[]> = T extends [infer A, ...infer B[]] ? [A, B] : T
+```
+
+### 分布式类型
+
+> 联合类型在条件类型中的分布式特性
+
+触发条件：
+
+1. 参数通过泛型传入
+2. 参数是联合类型
+3. 泛型参数不能被包裹
+
+结果：**将条件类型的判断结果分发到联合类型的每个元素上**（返回结果也是联合类型）
+
+```typescript
+type Naked<T> = T extends boolean ? "Y" : "N";
+
+// 等价于(number extends boolean ? "Y" : "N") | (boolean extends boolean ? "Y" : "N")
+// "N" | "Y"
+type Res = Naked<number | boolean>;
+```
+
+### 仅类型导入
+
+```typescript
+export type FooType = any;
+import type { FooType } from "./foo";
+import { Foo, type FooType } from "./foo";
+```
+
+## 基本类型
 
 - number
 - string
@@ -128,7 +210,35 @@ const cat: Cat = animal; // 类型 "Animal" 中缺少属性 "run"，但类型 "C
 - null
 - undefined
 - symbol
-- void
+
+### 模板字符串
+
+```typescript
+type Version = `${number}.${number}.${number}`;
+const a: Version = "1.1.1";
+const b: Version = "a.0.0"; // 报错
+```
+
+### unknown、any
+
+- unknown：有类型但未知
+- any：任何类型
+
+区别：
+
+- unknown 只能赋值给 unknown 和 any
+- any 可以赋值给任何类型
+
+### void、never
+
+- void（JS 中的 null）：函数没有返回值
+- never（JS 中的 undefined）：没有类型，如抛出错误的函数永远不会返回，其返回值就为 never。或是定义时未指明类型也没有初始元素的数组
+
+never 在联合类型中会直接移除。
+
+never 的使用场景：
+
+- 利用**只有 never 类型可以赋值给 never**的特点，在分支中处理类型检查
 
 ## 对象
 
@@ -137,7 +247,7 @@ const cat: Cat = animal; // 类型 "Animal" 中缺少属性 "run"，但类型 "C
 ```typescript
 const obj: { name: string; age: number } = {
   name: "xxx",
-  age: 21,
+  age: 21
 };
 ```
 
@@ -167,7 +277,7 @@ const arr: ReadonlyArray<number> = [1, 2, 3];
 const nums: number[] = arr as number[]; // 赋值时使用断言
 ```
 
-## 元组
+### 元组
 
 **定义方法：**数量有限且每一项的类型都固定的数组，分别给出**每一个元素**的类型
 
@@ -193,7 +303,7 @@ type Person = {
 type name = string;
 const a: Person = {
   name: "a",
-  age: 22,
+  age: 22
 };
 ```
 
@@ -212,7 +322,7 @@ interface Person {
 }
 const stu: Person = {
   name: "stu",
-  age: 21,
+  age: 21
 };
 ```
 
@@ -253,7 +363,7 @@ const jim: Student = {
   name: "jim",
   age: 22,
   sex: "male",
-  school: "wut",
+  school: "wut"
 };
 ```
 
@@ -267,8 +377,6 @@ const isAdult: fn = (name, age) => {
   return name;
 };
 ```
-
-​
 
 ### 用于定义索引类型
 
@@ -347,8 +455,9 @@ function func(): never {
 
 **函数重载的定义：**
 
-- 接收不同类型、数量的参数
-- 返回不同类型的值
+- 参数的数量不同
+- 参数的类型不同
+- 返回值类型不同
 
 **实现方法：**先定义重载列表，再进行函数实现
 
@@ -362,6 +471,23 @@ function move(x: any) {
     return Math.random();
   }
 }
+```
+
+### 逆变与协变
+
+要将函数 B 赋值给函数 A，需要满足条件：
+
+- B 的返回值是 A 返回值类型的子集
+- B 参数的是 A 参数类型的超集
+
+```typescript
+type FUNCTION_A = (name: string) => 1 | 2;
+let fn: FUNCTION_A;
+
+fn = (name: "a") => (Math.random() > 0.5 ? 1 : 2); // 报错
+fn = (arg: any) => (Math.random() > 0.5 ? 1 : 2); // 正常
+fn = (arg: string) => 1; // 正常
+fn = (arg: string) => 1 | 2 | 3; // 报错
 ```
 
 ## 类
@@ -385,13 +511,13 @@ class Person {
 const jim: Person = new Person("jim", 20);
 const john: Person = {
   name: "john",
-  age: 20,
+  age: 20
 };
 ```
 
 ### 访问控制权限
 
-权限分为三种，和 java 等类似：
+权限分为三种，和 `java` 等类似：
 
 - `public`（默认）：不做限制
 - `private`：只能在类内部使用。`constructor`也可以设为私有
@@ -469,6 +595,10 @@ p.name = 'new name'
 console.log(p.name);// name is: new name
 ```
 
+### override
+
+当子类重写父类方法时使用 override，若父类中不存在该方法会报错。
+
 ### 抽象类
 
 - 只能被继承，不能被实例化
@@ -496,14 +626,24 @@ x.say(); // student
 console.log(x.getName()); // x
 ```
 
-## 枚举类型
+#### 用 interface 实现抽象类
+
+```typescript
+interface FooStruct {
+  absProp: string;
+  get absGetter(): string;
+  absMethod(input: string): string;
+}
+```
+
+## enum（枚举）
 
 ```typescript
 enum Sta {
   offline, // 0
   online, // 1
   deleted = 4, // 显式赋值为4
-  ban, // 5
+  ban // 5
 }
 console.log(Sta[0]); // offline
 console.log(Sta.deleted); // deleted
@@ -630,9 +770,15 @@ namespace Home {
 
 如 ts 中直接引入 jQuery，使用时会报错，因为编辑器不知道 `$` 或 `jQuery` 是什么东西，则可以自己定义一个声明文件（并没有真的定义变量，而是定义了变量的类型）
 
+### 作用
+
+- **将类型独立于 js 代码存储**。编译 TS 文件后生成的`.d.ts` 文件和`.js`文件即是如此
+- 通过 `declare module` 语法为其他类型的文件（css、图片等）声明类型
+- 扩展已有的类型定义，如声明全局变量
+
 ### 定义变量
 
-可以使用`var` / `let` / `const`。声明时只定义类型，不能进行赋值。如果使用 const 则说明全局变量是常量，不能对其修改
+可以使用`var` / `let` / `const`。声明时只定义类型，不能进行赋值。如果使用 const 则说明全局变量是常量，不能对其修改。**不能为其赋值**。
 
 ```typescript
 declare var foo: string;

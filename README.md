@@ -23,6 +23,9 @@
 - [Koa中间件的原理](https://youky1.github.io/前端/Node.js/Koa中间件的原理) 
 - [如何理解Node的单线程](https://youky1.github.io/前端/Node.js/如何理解Node的单线程) 
 
+### TS
+- [type和interface的异同点](https://youky1.github.io/前端/TS/type和interface的异同点) 
+
 ### Vue
 - [MVVM是什么](https://youky1.github.io/前端/Vue/MVVM是什么) 
 - [SSR&预渲染](https://youky1.github.io/前端/Vue/SSR&预渲染) 
