@@ -104,6 +104,7 @@
 - [Git使用指南](https://youky1.github.io/其他/Git使用指南)
 - [Vite搭建React项目](https://youky1.github.io/其他/Vite搭建React项目)
 - [VuePress实战](https://youky1.github.io/其他/VuePress实战)
+- [函数式编程小结](https://youky1.github.io/其他/函数式编程小结)
 - [如何用Nodejs下载B站视频](https://youky1.github.io/其他/如何用Nodejs下载B站视频)
 - [实现一个命令行可视化库](https://youky1.github.io/其他/实现一个命令行可视化库)
 - [实现一个轮播图](https://youky1.github.io/其他/实现一个轮播图)
