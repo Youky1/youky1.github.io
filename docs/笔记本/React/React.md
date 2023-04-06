@@ -4,52 +4,16 @@ tag:
   - react
 ---
 
-# 起步
+# React
 
-## 创建新项目
-
-```
-npx create-react-app 项目名
-```
-
-## 引入
-
-每个使用 jsx 语法的文件，都要引入 React
-
-```javascript
-import React from react
-```
-
-项目的入口文件是 index.js
-
-```javascript
-import ReactDOM from 'react-dom';
-ReactDOM.render(
-	<组件>,
-	DOM节点
-)
-```
-
-## 进行自定义配置
-
-`create-react-app`创建的项目默认隐藏了`webpack.config.js`文件，如果要修改默认的配置，首先运行：
-
-```
-npm run eject
-```
-
-然后根目录中会出现两个文件夹：
-
-- `script`
-- `config`
-
-# JSX
+## JSX
 
 - JSX 表达式有多行时，在外加一对**括号**
 
 - 注释方法：
   - 单行：`{//注释内容}`，其中`}`必须放在第二行
   - 多行：`{/**/}`
+  
 - 插值：用一对括号{}，内部可以使用 JS 表达式
 
 - 必须包裹在一个最外层容器内。不会被渲染的最外层容器标签：`React.Fragment`（或使用空标签`<>`）
@@ -59,7 +23,10 @@ npm run eject
 - 特殊属性名替换：
   - 设置样式时，`calss`替换为 `className`
   - label 标签的`for`替换为`htmlFor`
-- JSX 实际上是`React.createElement(component, props, children)`的语法糖，所以使用 jsx 时必须引入 React
+  
+- JSX 实际上是`React.createElement(component, props, children)`的语法糖，所以老版本中使用 jsx 时必须引入 React
+
+  > Babel插件会提前注入jsx相关的API
 
   ```javascript
   <MyButton color="blue" shadowSize={2}>
@@ -71,115 +38,65 @@ npm run eject
 
 - 组件的 prop 没有赋值则默认值为 true
 
-# 组件
+## 组件
 
-- 组件的 props 或 state 发生改变时，组件的 render 函数就会重新执行（所有子组件也会）
+组件的 props 或 state 发生改变时，组件的 render 函数就会重新执行（所有子组件也会）。
 
-## 分类
 
-- 函数组件
 
-```javascript
-import React from "react";
-const element = ""; // 一个jsx元素
-function Name(props) {
-  return element;
-}
-```
+### 为什么类组件中不执行super(props)就无法使用this.props
 
-- 类组件
+因为对props的挂载是在 **React.Component** 中进行的，在基类中同时还注入了setState和forceUpdate方法。
 
-```javascript
-import Rect from "react";
-class Name {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
-    return {
-      /*
-				组件内容
-			*/
-    };
-  }
-}
-```
 
-## props
 
-> 父组件向子组件传递的属性值
+### 为什么函数组件的prototype上挂载属性无效
 
-### 单向数据流
+React对函数组件的调用是直接执行函数，而不是通过new。
 
-- 含义：子组件不能更改传来的值
-- 需要修改时，使用同样通过 props 传来的父组件的函数
 
-### 参数校验
 
-#### ProtoTypes
+### 组件间通信方式
 
-- 引入`PropTypes`
+1. props与callback
+2. ref获取元素
+3. context
+4. Redux等全局状态
+5. eventbus事件总线
 
-```
-import PropTypes from 'prop-types';
-```
 
-- 对组件 Com 进行参数校验：
-  - 对每个属性的类型进行约束
-  - `isRequired`表示该属性必须传入
-- 可用的类型： - `object` - 指定对象由某一类型的元素组成：`objectOf()` - 指定对象不同的属性由特定类型的元素组成：`shape({})` - `array` - 指定数组由某一类型的元素组成：`arrayOf()` - `func` - `bool` - `number` - `string`
-- 多种类型中的某一个：`oneOfTypes([])`
-- 若干特定值的某一个：`oneOf([])`
-- 任意类型：`any`
 
-```js
-class Com extends React.Component{
-	{/*...*/}
-}
+### State
 
-// 这里的proto是小写，这是组件的属性
-Com.propTypes = {
-	// 下面的Proto是大写，代表引入的ProtoTypes
-	age:PropTypes.number
-    name:PropTypes.string.isRequired,
-    optionalObjectWithShape: PropTypes.shape({
-  	  	color: PropTypes.string,
-    	fontSize: PropTypes.number
-  	}),
-}
-```
+#### setState和useState的异同
 
-#### defaultProps
+相同：底层调用的方法相同；都会进行批量更新
 
-没有传递该参数时的默认值
+不同：
 
-```js
-Com.defaultProps = {
-  age: 20,
-};
-```
+- useState的更新会对变量进行浅层比较，若相同不会进行更新
+- setState可以传入回调函数监听更新完成事件（函数组件中通过useEffect）
+- setState的逻辑是将传入state和老state合并。而useState的逻辑是重新赋值并覆盖
 
-## state
 
-> 组件自己的数据状态
 
-- 在类组件的`constructor`中声明`this.state`并赋初值
+#### setState的批处理模式
 
-- 更新`state`必须通过`setState`方法，会将传入对象和已有对象进行浅合并：
+在18版本之后，所有的更新都会使用批处理。
 
-  `this.setState({键：值,键2：值2})`
+在18版本之前，会对内部触发的事件监听函数内的setState做批处理；对于 `addEventListenr` 或异步代码则不会。
 
-- state 的更新是异步的。当对 state 的更新需要依赖 state 和 props 的值时，setState 接收一个函数。
-  其中参数表示更新前的上一个`state`，此次更新进行时的`props`
+>  原因，是否批处理是通过 ` isBatchingUpdates ` 判断的，异步代码切换了函数执行上下文
 
-  ```javascript
-  this.setState((lastState,props) => ({
-  	键：值
-  }), () => {
-  	// 更新完成后的回调函数
-  })
-  ```
+
+
+#### 强制同步更新：flushSync
+
+> 不推荐使用
+
+使用 `flushSync` 将会强制把它接收的函数中的setState同步执行，即DOM会立即更新。
+
+
 
 ## 生命周期
 
@@ -190,7 +107,7 @@ Com.defaultProps = {
    - 类组件的构造函数。必须在开头调用`super(props)`。
    - 构造函数中**不应存在副作用**
 
-2) `getDerivedStateFromProps`
+2.  `getDerivedStateFromProps`
 
    - 返回一个对象来更新`state`。若返回 null 则不进行更新
    - 仅适用于`state`的值总取决于`props`的情况
@@ -281,7 +198,7 @@ export default React.memo(Foo);
 
 ```js
 function Foo() {}
-export default React.memo(Foo, function(prevProps, nextProps) {
+export default React.memo(Foo, function (prevProps, nextProps) {
   // 返回true表示不更新，返回false表示要更新
 });
 ```
@@ -583,7 +500,9 @@ const [value, setValue] = useState("defaultValue");
 - **惰性初始化**：该参数也可以是一个函数，返回默认值。该函数只会在初次加载时执行
 - 同一组件内，可以多次调用`useState`
 
-## useEffect
+## 副作用
+
+### useEffect
 
 **目的**：
 
@@ -602,9 +521,14 @@ useEffect(() => {
 - 第一个参数是**函数**（effect），初次渲染（`componentDidMount`）以及更新（`componentDidUpdate` ）时执行。
 - 第二个参数是一个**数组**。默认情况下每次渲染 effect 都会调用。传入第二个数组后，若数组中所有元素在渲染前后都相等（===），则会跳过此次 effect 的执行。**传入空数组，即只执行一次**
 - 返回一个函数（可选），会在**组件卸载时**（`componentWillUnmount`）执行。
-- **执行时机**：DOM 更新完成，**浏览器渲染之后**，不会阻塞页面布局（异步执行）
+- **执行时机**：DOM 更新完成，**浏览器渲染之后**
+- 和生命周期函数的区别：**异步执行**，不会阻塞浏览器绘制
+
+
 
 ### useLayoutEffect
+
+> 需要在副作用中修改DOM，就用 `useLayoutEffect` ，否则用`useEffect`
 
 用法和 useEffect 相同。
 
@@ -612,6 +536,18 @@ useEffect(() => {
 
 - 会同步执行（会造成阻塞）
 - **执行时机**：DOM 更新完成，**浏览器渲染之前**
+
+
+
+### useInsertionEffect
+
+执行时机：DOM更新之前。
+
+使用场景：仅建议`css in JS`库的开发中使用，解决注入样式的性能问题。
+
+`css in JS`库的原理是动态生成选择器，并通过style标签插入。如果在 `useLayoutEffect` 或`useEffect`中进行操作，DOM已经更新完毕，插入style会造成重绘和重排
+
+
 
 ## useContext
 
@@ -642,7 +578,7 @@ static contextType = MyContext
 ```js
 const defaultState = {
   value: "",
-  list: [],
+  list: []
 };
 function reducer(state, action) {
   if (action.type == "change") {
@@ -654,7 +590,7 @@ function reducer(state, action) {
 function initFunction(val) {
   return {
     value: val,
-    list: [],
+    list: []
   };
 }
 function App() {
