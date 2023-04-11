@@ -13,7 +13,6 @@ tag:
 - 注释方法：
   - 单行：`{//注释内容}`，其中`}`必须放在第二行
   - 多行：`{/**/}`
-  
 - 插值：用一对括号{}，内部可以使用 JS 表达式
 
 - 必须包裹在一个最外层容器内。不会被渲染的最外层容器标签：`React.Fragment`（或使用空标签`<>`）
@@ -23,10 +22,9 @@ tag:
 - 特殊属性名替换：
   - 设置样式时，`calss`替换为 `className`
   - label 标签的`for`替换为`htmlFor`
-  
 - JSX 实际上是`React.createElement(component, props, children)`的语法糖，所以老版本中使用 jsx 时必须引入 React
 
-  > Babel插件会提前注入jsx相关的API
+  > Babel 插件会提前注入 jsx 相关的 API
 
   ```javascript
   <MyButton color="blue" shadowSize={2}>
@@ -42,61 +40,47 @@ tag:
 
 组件的 props 或 state 发生改变时，组件的 render 函数就会重新执行（所有子组件也会）。
 
+### 为什么类组件中不执行 super(props)就无法使用 this.props
 
+因为对 props 的挂载是在 **React.Component** 中进行的，在基类中同时还注入了 setState 和 forceUpdate 方法。
 
-### 为什么类组件中不执行super(props)就无法使用this.props
+### 为什么函数组件的 prototype 上挂载属性无效
 
-因为对props的挂载是在 **React.Component** 中进行的，在基类中同时还注入了setState和forceUpdate方法。
-
-
-
-### 为什么函数组件的prototype上挂载属性无效
-
-React对函数组件的调用是直接执行函数，而不是通过new。
-
-
+React 对函数组件的调用是直接执行函数，而不是通过 new。
 
 ### 组件间通信方式
 
-1. props与callback
-2. ref获取元素
+1. props 与 callback
+2. ref 获取元素
 3. context
-4. Redux等全局状态
-5. eventbus事件总线
-
-
+4. Redux 等全局状态
+5. eventbus 事件总线
 
 ### State
 
-#### setState和useState的异同
+#### setState 和 useState 的异同
 
 相同：底层调用的方法相同；都会进行批量更新
 
 不同：
 
-- useState的更新会对变量进行浅层比较，若相同不会进行更新
-- setState可以传入回调函数监听更新完成事件（函数组件中通过useEffect）
-- setState的逻辑是将传入state和老state合并。而useState的逻辑是重新赋值并覆盖
+- useState 的更新会对变量进行浅层比较，若相同不会进行更新
+- setState 可以传入回调函数监听更新完成事件（函数组件中通过 useEffect）
+- setState 的逻辑是将传入 state 和老 state 合并。而 useState 的逻辑是重新赋值并覆盖
 
+#### setState 的批处理模式
 
+在 18 版本之后，所有的更新都会使用批处理。
 
-#### setState的批处理模式
+在 18 版本之前，会对内部触发的事件监听函数内的 setState 做批处理；对于 `addEventListenr` 或异步代码则不会。
 
-在18版本之后，所有的更新都会使用批处理。
-
-在18版本之前，会对内部触发的事件监听函数内的setState做批处理；对于 `addEventListenr` 或异步代码则不会。
-
->  原因，是否批处理是通过 ` isBatchingUpdates ` 判断的，异步代码切换了函数执行上下文
-
-
+> 原因，是否批处理是通过 `isBatchingUpdates` 判断的，异步代码切换了函数执行上下文
 
 #### 强制同步更新：flushSync
 
 > 不推荐使用
 
-使用 `flushSync` 将会强制把它接收的函数中的setState同步执行，即DOM会立即更新。
-
-
+使用 `flushSync` 将会强制把它接收的函数中的 setState 同步执行，即 DOM 会立即更新。
 
 ## 生命周期
 
@@ -107,10 +91,10 @@ React对函数组件的调用是直接执行函数，而不是通过new。
    - 类组件的构造函数。必须在开头调用`super(props)`。
    - 构造函数中**不应存在副作用**
 
-2.  `getDerivedStateFromProps`
+2. `getDerivedStateFromProps`
 
-   - 返回一个对象来更新`state`。若返回 null 则不进行更新
-   - 仅适用于`state`的值总取决于`props`的情况
+- 返回一个对象来更新`state`。若返回 null 则不进行更新
+- 仅适用于`state`的值总取决于`props`的情况
 
 3. `render`：
 
@@ -205,9 +189,9 @@ export default React.memo(Foo, function (prevProps, nextProps) {
 
 - 若函数组件中使用了`useState`、`useEffect`、`useContext`等 Hook，`state`和`context`改变时仍会触发更新
 
-# 虚拟 DOM
+## 虚拟 DOM
 
-## 渲染流程
+### 渲染流程
 
 - 数据 + JSX 模板生成虚拟 DOM
 
@@ -221,7 +205,7 @@ export default React.memo(Foo, function (prevProps, nextProps) {
   - 和原来的虚拟 DOM 进行比对，找出区别
   - 操作 DOM 更新相应内容
 
-## Diff 算法
+### Diff 算法
 
 > 比对原来的虚拟 DOM 和新生成的虚拟 DOM 的区别
 
@@ -229,51 +213,49 @@ export default React.memo(Foo, function (prevProps, nextProps) {
   - 若同层的节点不同，则直接替换其之下的所有节点
   - 若相同，则再比较下层的节点
 
-# ref
+## ref
 
 > 用于获取某个节点元素
 
-## 适用的情况
+### 适用的情况
 
 - 触发强制动画
 - 管理焦点
 - 文本选择
 - 非受控表单（如文件上传）
 
-## 创建
+### ref 赋值的三种方式
 
-- 使用`React.createRef()`创建，赋值给一个变量 r
-- 将变量 r 赋值给组件或 DOM 的`ref`属性
+- 使用字符串，把 DOM 或组件实例绑定到`this.$refs`的同名属性
 
-```js
-class MyComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
+```javascript
+export default class Index extends React.Component {
+  componentDidMount() {
+    console.log(this.refs.currentDom);
   }
-  render() {
-    return <div ref={this.myRef} />;
-  }
+  render = () => (
+    <div>
+      <div ref="currentDom">字符串模式获取元素或组件</div>
+    </div>
+  );
 }
 ```
 
-- `ref`属性的取值也可以是一个函数，该函数接收 DOM 节点或组件实例作为参数，可以将引用赋值给任意变量
+- 使用函数
 
-## 使用
+```html
+<div ref={(node) => myRef.current = node } ></div>
+```
 
-通过 ref 实例的`current属性`访问其引用（在`constructor`中定义，**不能马上读取**）
+- 使用 ref 对象
 
-```js
-componentDidMount(){
-    console.log(this.myRef.current)
+```html
+function Item(){ const myRef = useRef() return
+<div ref="{myRef}">MyRef</div>
 }
 ```
 
-- 对于 DOM 元素，获取的就是**DOM 节点**
-- 对于 class 组件，获取的是组件的**组件实例**
-- **不能用于函数组件**（函数组件内部可以使用 ref 引用其他元素，但 ref 属性不能用在函数组件上）
-
-## ref 转发
+### 跨层级转发
 
 在 ref 引用的组件中，将 ref 转发到子级组件或 DOM 元素上：
 
@@ -288,7 +270,42 @@ const ref = React.createRef();
 <FancyButton ref={ref}>Click me!</FancyButton>;
 ```
 
-# Portals
+### 合并转发
+
+在转发 ref 时，可以通过赋值的方式将多个 ref 合并到一个对象中
+
+```javascript
+function Demo(props, ref) {
+  const ref1 = useRef();
+  const ref2 = useRef();
+  useEffect(() => {
+    ref.current = {
+      ref1,
+      ref2
+    };
+  }, []);
+  return (
+    <div>
+      <input ref={ref1} />
+      <input ref={ref2} />
+    </div>
+  );
+}
+```
+
+### 执行时机和处理逻辑
+
+对于 ref 的处理都是在更新的`commit`阶段（实际修改 DOM 的阶段）完成的。
+
+对于 ref 会进行两次处理，分别是 DOM 更新前后进行的，也就是说绑定函数的形式，页面更新一次，会执行两次
+
+- 第一次将原来的 ref 置为 null
+
+> 卸载时处理也是如此
+
+- 第二次是 DOM 更新完之后，为 ref 重新赋值
+
+## Portals
 
 > 提供一种将子组件渲染到父组件 DOM 树之外（任意 DOM 节点）的方案
 
@@ -318,7 +335,7 @@ class Foo {
 
 挂载于`app-root`的根组件中，可以捕获到`modal-root`中的事件
 
-# 事件处理
+## 事件处理
 
 - 采用驼峰命名
 
@@ -348,41 +365,15 @@ class Foo {
       onClick = {this.func.bind(this,arg)} // e自动传入，作为最后一个参数
     ```
 
-# 渲染
+## Context
 
-##条件渲染
-
-- 避免组件渲染：
-  - 函数组件：return null
-  - 类组件：render 方法中 return null
-- 条件渲染：在插值表达式中通过 JS 进行控制
-
-## 循环渲染
-
-- 将一个列表循环渲染的方法：通过 map 等遍历方法返回元素数组
-- 循环生成的每一项要有一个独一无二的 key 值
-- 设置 key 值的位置：最靠近数组的上下文中（一般是 map 方法内）
-
-# 表单
-
-- 受控组件：state 作为唯一数据源。
-- 控制方法：
-  - 监听 onChange 事件，用`event.target.value`更新 state 中的数据
-  - 表单标签上：`value={this.state.xxx}`
-- 对于下拉列表：
-  - 在 select 标签上设置 value 属性，取值可以是字符串或数组（对应多选）
-  - option 中 value 值和 select 标签相同的项会被选中
-  - 在 select 标签监听 onChange 事件，通过 e.target.event 获取点击选项的 value 值
-
-# Context
-
-## 1. 目的
+### 1. 目的
 
 在一个组件树中共享全局数据（如主题、颜色等变量），避免在组件之间层层传递 props
 
-## 2. 使用流程
+### 2. 使用流程
 
-### 创建 Context 对象
+#### 创建 Context 对象
 
 ```js
 const MyContext = React.createContext(defaultValue);
@@ -390,7 +381,7 @@ const MyContext = React.createContext(defaultValue);
 
 只有当 provider 没有提供值时，defaultValue 才起作用
 
-### 使用 Context 的 Provider 组件
+#### 使用 Context 的 Provider 组件
 
 ```jsx
 <MyContext.Provider value={/*某个自定义的值*/}>
@@ -403,7 +394,7 @@ const MyContext = React.createContext(defaultValue);
 - 组件只接收到最近一层的 value。即外层的值会被覆盖
 - 当 Provider 的 value 变化时，内部所有使用到 Context 的组件都要重新渲染，并且不受制于`shouldComponentUpdate`
 
-### 使用 contextType 读取一个 Context（类组件）
+#### 使用 contextType 读取一个 Context（类组件）
 
 ```javascript
 class Title extends React.Component {
@@ -426,7 +417,7 @@ Title.contextType = MyContext;
 
 - 若要对 context 进行修改，则用 context 传递一个对象，在其中包括要传递的值以及改变它的函数
 
-### 创建 Consumer 组件读取多个 Context
+#### 创建 Consumer 组件读取多个 Context
 
 ```javascript
 import { createContext } from "react";
@@ -473,7 +464,25 @@ class Child extends React.Component {
 }
 ```
 
-# Hooks
+#### 函数组件使用 context
+
+```javascript
+const A = memo(() => {
+  const { time } = useContext(context);
+  return (
+    <div>
+      <h1>{time}</h1>
+    </div>
+  );
+});
+```
+
+#### 三种使用 context 方法的区别
+
+- A 组件中使用 Consumer 组件消费 context 时，当 context 内容改变，不会导致 A 组件重新渲染
+- 其他两种方式，A 组件会重新渲染
+
+## Hooks
 
 **定义**：用于在函数组件中钩入`state`和`生命周期`的**_函数_**
 
@@ -483,7 +492,7 @@ class Child extends React.Component {
 - 只能在**函数组件**和**自定义 Hook**中调用
 - 需要从 react 中引入
 
-## useState
+### useState
 
 **目的**：在函数组件中使用`state`
 
@@ -500,9 +509,9 @@ const [value, setValue] = useState("defaultValue");
 - **惰性初始化**：该参数也可以是一个函数，返回默认值。该函数只会在初次加载时执行
 - 同一组件内，可以多次调用`useState`
 
-## 副作用
+### 副作用
 
-### useEffect
+#### useEffect
 
 **目的**：
 
@@ -524,11 +533,9 @@ useEffect(() => {
 - **执行时机**：DOM 更新完成，**浏览器渲染之后**
 - 和生命周期函数的区别：**异步执行**，不会阻塞浏览器绘制
 
+#### useLayoutEffect
 
-
-### useLayoutEffect
-
-> 需要在副作用中修改DOM，就用 `useLayoutEffect` ，否则用`useEffect`
+> 需要在副作用中修改 DOM，就用 `useLayoutEffect` ，否则用`useEffect`
 
 用法和 useEffect 相同。
 
@@ -537,19 +544,15 @@ useEffect(() => {
 - 会同步执行（会造成阻塞）
 - **执行时机**：DOM 更新完成，**浏览器渲染之前**
 
+#### useInsertionEffect
 
-
-### useInsertionEffect
-
-执行时机：DOM更新之前。
+执行时机：DOM 更新之前。
 
 使用场景：仅建议`css in JS`库的开发中使用，解决注入样式的性能问题。
 
-`css in JS`库的原理是动态生成选择器，并通过style标签插入。如果在 `useLayoutEffect` 或`useEffect`中进行操作，DOM已经更新完毕，插入style会造成重绘和重排
+`css in JS`库的原理是动态生成选择器，并通过 style 标签插入。如果在 `useLayoutEffect` 或`useEffect`中进行操作，DOM 已经更新完毕，插入 style 会造成重绘和重排
 
-
-
-## useContext
+### useContext
 
 **目的：**在函数组件中读取`Context对象`的值
 
@@ -566,7 +569,7 @@ static contextType = MyContext
 - 返回的是**Context 对象的当前值**
 - 当`MyContext.Provider`提供的值更新时，该 hook 会触发重新渲染（即使父组件通过`shouldComponentUpdate`跳过了更新）
 
-## useReducer
+### useReducer
 
 **目的：**
 
@@ -610,7 +613,9 @@ function App() {
 
 - 若需要在其他组件中触发变更，则将`dispatch`函数通过`props`或`Context`传递给子组件
 
-## useCallback
+### 持久化
+
+#### useCallback
 
 **目的：**返回一个`memoized函数`
 
@@ -626,7 +631,7 @@ const memoizedCallback = useCallback(() => doSomething(a, b), [a, b]);
 - 第二个参数是数组，应列出函数所依赖的所有变量，这些变量**不会传递给函数作为参数**
 - 若没有提供依赖数组，则每次都重新计算
 
-## useMemo
+#### useMemo
 
 **目的：**返回一个`memoized值`
 
@@ -644,7 +649,9 @@ const memoValue = useMemo(() => {
 - 两个参数的含义和`useCallback`一样
 - 若没有提供依赖数组，则每次都重新计算
 
-## useRef
+### Ref
+
+#### useRef
 
 **目的：**
 
@@ -738,7 +745,7 @@ function Test() {
   const prevCountRef = usePre(count);
   ```
 
-## useImperativeHandle
+#### useImperativeHandle
 
 **目的：**自定义`ref`给父组件暴露的内容，即暴露某些可操作方法，而不是直接暴露引用
 
@@ -786,24 +793,24 @@ function usePre(value) {
 }
 ```
 
-# 样式处理
+## 样式处理
 
-## 需要处理的问题
+### 需要处理的问题
 
 CSS 没有全局作用域，会带来**全局污染**、**命名冲突**的问题
 
-## 解决思路
+### 解决思路
 
 1. `CSS in JS`： 如`styled-components`
 2. `CSS Module`
 
-## CSS Module
+### CSS Module
 
 > **_CSS Module 仅处理类选择器_**
 
 在最新版的`create-react-app`创建的项目中，已经自带了对于`CSS Module`的支持
 
-### 局部样式
+#### 局部样式
 
 1. 对于局部样式，命名时使用`xxx.module.css`的格式
 2. 在引入样式时，引入一个对象的形式，并用它的属性进行赋值
@@ -814,7 +821,7 @@ import style from "./index.module.css";
 <div className={style.title}></div>;
 ```
 
-### 全局样式
+#### 全局样式
 
 - 使用传统的命名方法并直接引入
 - 在`xxx.module.css`中，使用`:global()`语法
