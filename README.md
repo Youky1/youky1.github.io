@@ -55,6 +55,7 @@
 - [虚拟DOM](https://youky1.github.io/前端/Vue/虚拟DOM) 
 
 ### Vue3
+- [Diff算法总结](https://youky1.github.io/前端/Vue3/Diff算法总结) 
 
 ### 前端工程化
 - [CommonJS和ESModule的区别](https://youky1.github.io/前端/前端工程化/CommonJS和ESModule的区别) 
