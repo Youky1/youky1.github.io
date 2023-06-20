@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vuepress dev docs --temp .temp",
-    "build": "vuepress build docs && node deploy.js"
+    "build": "vuepress build docs && node deploy.js",
+    "pub": "npm run build && git add README.md && git commit -m 'feat' && git push"
   },
   "author": "",
   "license": "ISC",
