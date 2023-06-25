@@ -85,6 +85,7 @@
 - [3. AOP：面向切面编程](https://youky1.github.io/后端/Nest/3. AOP：面向切面编程) 
 - [4. 全局模块&生命周期](https://youky1.github.io/后端/Nest/4. 全局模块&生命周期) 
 - [5. Provider](https://youky1.github.io/后端/Nest/5. Provider) 
+- [6. 动态Module](https://youky1.github.io/后端/Nest/6. 动态Module) 
 
 ### Node
 - [Koa中间件的原理](https://youky1.github.io/后端/Node/Koa中间件的原理) 
