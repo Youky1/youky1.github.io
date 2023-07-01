@@ -86,6 +86,9 @@
 - [4. 全局模块&生命周期](https://youky1.github.io/后端/Nest/4. 全局模块&生命周期) 
 - [5. Provider](https://youky1.github.io/后端/Nest/5. Provider) 
 - [6. 动态Module](https://youky1.github.io/后端/Nest/6. 动态Module) 
+- [7. Middleware](https://youky1.github.io/后端/Nest/7. Middleware) 
+- [8. Rxjs和Interceptor](https://youky1.github.io/后端/Nest/8. Rxjs和Interceptor) 
+- [9. 文件上传](https://youky1.github.io/后端/Nest/9. 文件上传) 
 
 ### Node
 - [Koa中间件的原理](https://youky1.github.io/后端/Node/Koa中间件的原理) 
