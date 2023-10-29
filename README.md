@@ -28,6 +28,9 @@
 - [闭包问题](https://youky1.github.io/前端/JS/闭包问题) 
 - [防抖和节流](https://youky1.github.io/前端/JS/防抖和节流) 
 
+### React
+- [React理念](https://youky1.github.io/前端/React/React理念) 
+
 ### TS
 - [type和interface的异同点](https://youky1.github.io/前端/TS/type和interface的异同点) 
 - [装饰器](https://youky1.github.io/前端/TS/装饰器) 
@@ -76,7 +79,6 @@
 ## 后端
 
 ### Go
-- [Golang](https://youky1.github.io/后端/Go/Golang) 
 
 ### Nest
 - [0. IOC与DI](https://youky1.github.io/后端/Nest/0. IOC与DI) 
@@ -88,7 +90,6 @@
 - [6. 动态Module](https://youky1.github.io/后端/Nest/6. 动态Module) 
 - [7. Middleware](https://youky1.github.io/后端/Nest/7. Middleware) 
 - [8. Rxjs和Interceptor](https://youky1.github.io/后端/Nest/8. Rxjs和Interceptor) 
-- [9. 文件上传](https://youky1.github.io/后端/Nest/9. 文件上传) 
 
 ### Node
 - [Koa中间件的原理](https://youky1.github.io/后端/Node/Koa中间件的原理) 
