@@ -77,3 +77,31 @@ export default function App() {
   )
 }
 ```
+
+## React 15 架构的局限
+
+React 15 架构分为两层：
+
+- Reconciler（协调器）—— 负责找出变化的组件
+- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+
+而更新时的过程是二者交替完成，即协调器每找到一处更新，渲染器就进行一次 DOM 更新。Reconciler 中，会递归处理子组件。递归执行一旦开始，则无法中断，当递归更新时间超过了 16ms，就会表现出掉帧。
+
+因此，15 的架构不满足快速响应的理念
+
+## React 16 架构的更新
+
+### Scheduler
+
+React 16 的架构分为三层，在 15 的基础上多了调度器 Scheduler 。
+
+由于更新任务的中断，是以浏览器是否有空余时间为标准的，因此需要一种“浏览器通知我们有剩余时间”的机制。
+
+部分浏览器提供了[requestIdleCallback](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestIdleCallback) 这个 API，而 Scheduler 也提供了这个功能，此外还支持不同的调度优先级。
+
+### Reconciler 的改变
+
+1. Reconciler 不在是递归执行，而是变为可中断的循环。每次循环时会判断当前是否有空余时间
+2. Reconciler 与 Renderer 不再是交替工作 。Reconciler 会先在虚拟 DOM 上进行标记，当所有组件都完成标记后，Renderer 再一次性进行渲染
+
+由于 Reconciler 的标记过程是内存中运行不影响 DOM，因此是可中断的。
