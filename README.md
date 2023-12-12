@@ -35,6 +35,7 @@
 - [3. render阶段](https://youky1.github.io/前端/React/3. render阶段) 
 - [4. commit阶段](https://youky1.github.io/前端/React/4. commit阶段) 
 - [5. schedule阶段](https://youky1.github.io/前端/React/5. schedule阶段) 
+- [6. 错误捕获](https://youky1.github.io/前端/React/6. 错误捕获) 
 
 ### TS
 - [type和interface的异同点](https://youky1.github.io/前端/TS/type和interface的异同点) 
