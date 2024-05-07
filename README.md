@@ -65,6 +65,7 @@
 
 ### 前端工程化
 - [CommonJS和ESModule的区别](https://youky1.github.io/前端/前端工程化/CommonJS和ESModule的区别) 
+- [SSR](https://youky1.github.io/前端/前端工程化/SSR) 
 - [Vite相关问题](https://youky1.github.io/前端/前端工程化/Vite相关问题) 
 - [Vue和React的区别](https://youky1.github.io/前端/前端工程化/Vue和React的区别) 
 - [Webpack](https://youky1.github.io/前端/前端工程化/Webpack) 
