@@ -2286,13 +2286,6 @@
     vuepress-plugin-mailchimp "^1.4.1"
     vuepress-plugin-sitemap "^2.3.1"
 
-"@vuepress/plugin-google-analytics@^1.9.7":
-  version "1.9.7"
-  resolved "https://registry.npmmirror.com/@vuepress/plugin-google-analytics/-/plugin-google-analytics-1.9.7.tgz"
-  integrity sha512-ZpsYrk23JdwbcJo9xArVcdqYHt5VyTX9UN9bLqNrLJRgRTV0X2jKUkM63dlKTJMpBf+0K1PQMJbGBXgOO7Yh0Q==
-  dependencies:
-    "@vuepress/types" "1.9.7"
-
 "@vuepress/plugin-last-updated@1.9.9":
   version "1.9.9"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-last-updated/-/plugin-last-updated-1.9.9.tgz#a7cb5f39b2793c8d113de08a514c316c26cc38c1"
@@ -2354,15 +2347,6 @@
     stylus-loader "^3.0.2"
     vuepress-plugin-container "^2.0.2"
     vuepress-plugin-smooth-scroll "^0.0.3"
-
-"@vuepress/types@1.9.7":
-  version "1.9.7"
-  resolved "https://registry.npmmirror.com/@vuepress/types/-/types-1.9.7.tgz"
-  integrity sha512-moLQzkX3ED2o18dimLemUm7UVDKxhcrJmGt5C0Ng3xxrLPaQu7UqbROtEKB3YnMRt4P/CA91J+Ck+b9LmGabog==
-  dependencies:
-    "@types/markdown-it" "^10.0.0"
-    "@types/webpack-dev-server" "^3"
-    webpack-chain "^6.0.0"
 
 "@vuepress/types@1.9.9":
   version "1.9.9"

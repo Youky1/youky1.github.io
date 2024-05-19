@@ -5,3 +5,4 @@ docs/.vuepress/dist
 package-lock.json
 /dist
 /demo
+yarn.lock
